@@ -13,22 +13,24 @@ import matplotlib
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import train_test_split
+import os
 print("imports ok")
 
-#daten = 'C:\\Users\\Stefan\\Nextcloud\\Thesisstuff\\Datensätze\\MachineLearningCSV\\MachineLearningCVE\\'
+# Run TensorFlow on CPU
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
-daten = './home/stefan/daten/'
+daten = 'C:\\Users\\Stefan\\Nextcloud\\Thesisstuff\\Datensätze\\MachineLearningCSV\\MachineLearningCVE\\'
+
+# daten = './home/stefan/daten/'
 
 '''load datasets'''
 
 file = daten + 'Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv'
 
-df = pd.read_csv(file, header=None, low_memory=False, skiprows=1)
+df = pd.read_csv(file, header=None, low_memory=False, skiprows=1, nrows=100)
 
 # Replace negative Infinity Values
 df = df.replace([np.inf, -np.inf], 0).fillna(0)
-
-# df.dropna(axis="rows", how="any", inplace=True)
 
 print("Read {} rows.".format(len(df)))
 
@@ -208,6 +210,9 @@ x_train, x_test, y_train, y_test = train_test_split(
     X, Y, test_size=0.33, random_state=42, shuffle=True)
 
 # Create neural net
+
+print('Creating Neural Network')
+
 model = Sequential()
 layer1 = Dense(10, input_dim=X.shape[1], kernel_initializer='normal', activation='relu')
 layer2 = Dense(50, input_dim=X.shape[1], kernel_initializer='normal', activation='relu')
@@ -250,7 +255,14 @@ plt.xlabel('Epoch')
 plt.legend(['Train', 'Test'], loc='upper left')
 plt.show()
 
+#Ausgangsmodell
+a1 = layer1.get_weights()
+a2 = layer2.get_weights()
+a3 = layer3.get_weights()
+a4 = layer4.get_weights()
+a5 = layer5.get_weights()
 
+print(a4)
 
 
 
