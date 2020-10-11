@@ -15,8 +15,9 @@ import seaborn as sns
 from sklearn.model_selection import train_test_split
 print("imports ok")
 
-daten = 'C:\\Users\\Stefan\\Nextcloud\\Thesisstuff\\Datensätze\\MachineLearningCSV\\MachineLearningCVE\\'
+#daten = 'C:\\Users\\Stefan\\Nextcloud\\Thesisstuff\\Datensätze\\MachineLearningCSV\\MachineLearningCVE\\'
 
+daten = './home/stefan/daten/'
 
 '''load datasets'''
 
@@ -233,11 +234,11 @@ print(history.history.keys())
 
 # Confusion Matrix
 print("MATRIX")
-cfm = confusion_matrix(y_eval,pred)
+cfm = confusion_matrix(y_eval, pred)
 print(cfm)
 
 # Report
-cmp = classification_report(y_eval,pred)
+cmp = classification_report(y_eval, pred)
 print(cmp)
 
 # Plot training & validation accuracy values
