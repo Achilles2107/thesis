@@ -166,7 +166,7 @@ def create_tff_model():
   keras_model_clone = compile(tf.keras.models.clone_model(keras_model))
   return tff.learning.from_keras_model(
       keras_model_clone,
-      dummy_batch=dummy_batch,
+      input_spec=dummy_batch,
       loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
       metrics=[FlattenedCategoricalAccuracy()])
 
