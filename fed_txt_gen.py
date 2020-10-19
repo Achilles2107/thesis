@@ -3,7 +3,6 @@ import collections
 import functools
 import os
 import time
-
 import numpy as np
 import tensorflow as tf
 import tensorflow_federated as tff
@@ -165,12 +164,17 @@ def create_tff_model():
   x = tf.constant(np.random.randint(1, len(vocab), size=[BATCH_SIZE, SEQ_LENGTH]))
   dummy_batch = collections.OrderedDict([('x', x), ('y', x)])
   keras_model_clone = compile(tf.keras.models.clone_model(keras_model))
-  return tff.learning.from_compiled_keras_model(
-      keras_model_clone, dummy_batch=dummy_batch)
+  return tff.learning.from_keras_model(
+      keras_model_clone,
+      dummy_batch=sample_batch,
+      loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+      metrics=[FlattenedCategoricalAccuracy()])
 
 
 # This command builds all the TensorFlow graphs and serializes them:
-fed_avg = tff.learning.build_federated_averaging_process(model_fn=create_tff_model)
+fed_avg = tff.learning.build_federated_averaging_process(model_fn=create_tff_model,
+                                                         client_optimizer_fn=lambda: tf.keras.optimizers.SGD(learning_rate=0.02),
+                                                         server_optimizer_fn=lambda: tf.keras.optimizers.SGD(learning_rate=1.0))
 
 state = fed_avg.initialize()
 state, metrics = fed_avg.next(state, [example_dataset.take(1)])

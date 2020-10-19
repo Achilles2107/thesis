@@ -398,7 +398,7 @@ bias_1 = np.reshape(bias_1, (10,))
 bias_2 = np.reshape(bias_2, (50,))
 bias_3 = np.reshape(bias_3, (10,))
 bias_4 = np.reshape(bias_4, (1, ))
-# bias_5 = np.reshape(bias_5, (2, ))
+bias_5 = np.reshape(bias_5, (2, ))
 
 # set new weights
 l1=[]
