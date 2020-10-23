@@ -27,7 +27,7 @@ daten = 'C:\\Users\\Stefan\\Nextcloud\\Thesisstuff\\Datensätze\\MachineLearning
 
 file = daten + 'Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv'
 
-df = pd.read_csv(file, header=None, low_memory=False, skiprows=1, nrows=500)
+df = pd.read_csv(file, header=None, low_memory=False, skiprows=1, nrows=50)
 
 # Replace negative Infinity Values
 df = df.replace([np.inf, -np.inf], 0).fillna(0)
@@ -447,8 +447,8 @@ model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accur
 # Measure accuracy
 prediction = model.predict(x_test)
 y_score = prediction
-pred = np.argmax(prediction,axis=1)
-y_eval = np.argmax(y_test,axis=1)
+pred = np.argmax(prediction, axis=1)
+y_eval = np.argmax(y_test, axis=1)
 score = accuracy_score(y_eval, pred)
 print("Validation score: {}".format(score))
 print(history.history.keys())
