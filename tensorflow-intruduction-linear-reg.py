@@ -8,8 +8,8 @@ from six.moves import urllib
 from IPython.display import clear_output
 
 # Load dataset.
-dftrain = pd.read_csv('https://storage.googleapis.com/tf-datasets/titanic/train.csv') # training data
-dfeval = pd.read_csv('https://storage.googleapis.com/tf-datasets/titanic/eval.csv') # testing data
+dftrain = pd.read_csv('https://storage.googleapis.com/tf-datasets/titanic/train.csv')  # training data
+dfeval = pd.read_csv('https://storage.googleapis.com/tf-datasets/titanic/eval.csv')  # testing data
 y_train = dftrain.pop('survived')
 y_eval = dfeval.pop('survived')
 
@@ -42,12 +42,12 @@ train_input_fn = make_input_fn(dftrain, y_train)  # here we will call the input_
 eval_input_fn = make_input_fn(dfeval, y_eval, num_epochs=1, shuffle=False)
 
 linear_est = tf.estimator.LinearClassifier(feature_columns=feature_columns)
-# We create a linear estimtor by passing the feature columns we created earlier
+# We create a linear estimator by passing the feature columns we created earlier
 
 linear_est.train(train_input_fn)  # train
 result = linear_est.evaluate(eval_input_fn)  # get model metrics/stats by testing on tetsing data
 
-clear_output()  # clears consoke output
+clear_output()  # clears console output
 print(result['accuracy'])  # the result variable is simply a dict of stats about our model
 
 pred_dicts = list(linear_est.predict(eval_input_fn))
@@ -55,17 +55,4 @@ probs = pd.Series([pred['probabilities'][1] for pred in pred_dicts])
 
 probs.plot(kind='hist', bins=20, title='predicted probabilities')
 
-print(dftrain.head())
-print(dftrain.describe())
-print(dftrain.shape)
-
-print(y_train.head())
-
-dftrain.age.hist(bins=20)
-
-dftrain.sex.value_counts().plot(kind='barh')
-
-dftrain['class'].value_counts().plot(kind='barh')
-
-pd.concat([dftrain, y_train], axis=1).groupby('sex').survived.mean().plot(kind='barh').set_xlabel('% survive')
-
+plt.show()
