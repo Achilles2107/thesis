@@ -364,31 +364,41 @@ bias_4 = []
 bias_5 = []
 
 
-bias_1.append( ( bias_list[0] + bias_list2[0] + bias_list3[0]) / 3 )
+row = []
+row.append( ( bias_list[0] + bias_list2[0] + bias_list3[0]) / 3 )
+bias_1.append(row)
 bias_1 = np.array(bias_1[0])
 bias_1 = bias_1.astype('float32')
 
-bias_2.append( ( bias_list[1] + bias_list2[1] + bias_list3[1]) / 3 )
+row = []
+row.append( ( bias_list[1] + bias_list2[1] + bias_list3[1]) / 3 )
+bias_2.append(row)
 bias_2 = np.array(bias_2[0])
 bias_2 = bias_2.astype('float32')
 
-bias_3.append( ( bias_list[2] + bias_list2[2] + bias_list3[2]) / 3 )
+row = []
+row.append( ( bias_list[2] + bias_list2[2] + bias_list3[2]) / 3 )
+bias_3.append(row)
 bias_3 = np.array(bias_3[0])
 bias_3 = bias_3.astype('float32')
 
-bias_4.append( ( bias_list[3] + bias_list2[3] + bias_list3[3]) / 3 )
+row = []
+row.append( ( bias_list[3] + bias_list2[3] + bias_list3[3]) / 3 )
+bias_4.append(row)
 bias_4 = np.array(bias_4[0])
 bias_4 = bias_4.astype('float32')
 
-bias_5.append( ( bias_list[4] + bias_list2[4] + bias_list3[4]) / 3 )
+row = []
+row.append( ( bias_list[4] + bias_list2[4] + bias_list3[4]) / 3 )
+bias_5.append(row)
 bias_5 = np.array(bias_5[0])
 bias_5 = bias_5.astype('float32')
 
-# bias_1 = np.reshape(bias_1, (10,))
-# bias_2 = np.reshape(bias_2, (50,))
-# bias_3 = np.reshape(bias_3, (10,))
-# bias_4 = np.reshape(bias_4, (1, ))
-# bias_5 = np.reshape(bias_5, (2, ))
+bias_1 = np.reshape(bias_1, (10,))
+bias_2 = np.reshape(bias_2, (50,))
+bias_3 = np.reshape(bias_3, (10,))
+bias_4 = np.reshape(bias_4, (1, ))
+bias_5 = np.reshape(bias_5, (2, ))
 
 # set new weights
 l1=[]
