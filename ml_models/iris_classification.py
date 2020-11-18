@@ -1,6 +1,7 @@
 import os
 import matplotlib.pyplot as plt
 import tensorflow as tf
+import pandas as pd
 
 print("TensorFlow version: {}".format(tf.__version__))
 print("Eager execution: {}".format(tf.executing_eagerly()))
@@ -12,9 +13,13 @@ train_dataset_fp = tf.keras.utils.get_file(fname=os.path.basename(train_dataset_
 
 print("Local copy of the dataset file: {}".format(train_dataset_fp))
 
+df = pd.read_csv(train_dataset_fp)
+df.head()
+
 # column order in CSV file
 column_names = ['sepal_length', 'sepal_width', 'petal_length', 'petal_width', 'species']
 
+# Slicing the Dataset in Features and Label
 feature_names = column_names[:-1]
 label_name = column_names[-1]
 
@@ -25,6 +30,8 @@ class_names = ['Iris setosa', 'Iris versicolor', 'Iris virginica']
 
 batch_size = 32
 
+# Create Dataset from csv
+# num_epochs = number of loops with the dataset : none => infinite loop
 train_dataset = tf.data.experimental.make_csv_dataset(
     train_dataset_fp,
     batch_size,
@@ -36,6 +43,7 @@ features, labels = next(iter(train_dataset))
 
 print(features)
 
+# Create Graph for Features Groups
 plt.scatter(features['petal_length'],
             features['sepal_length'],
             c=labels,
@@ -46,27 +54,29 @@ plt.ylabel("Sepal length")
 plt.show()
 
 
+# Packs the Features in a array and rises its dimension with tf.stack
 def pack_features_vector(features, labels):
   """Pack the features into a single array."""
   features = tf.stack(list(features.values()), axis=1)
   return features, labels
 
 
+# Add tf.stack features, label to train_dataset
 train_dataset = train_dataset.map(pack_features_vector)
 
 features, labels = next(iter(train_dataset))
 
-print(features[:5])
+print(features[:-1])
 
+# Creating the model
 model = tf.keras.Sequential([
   tf.keras.layers.Dense(10, activation=tf.nn.relu, input_shape=(4,)),  # input shape required
   tf.keras.layers.Dense(10, activation=tf.nn.relu),
   tf.keras.layers.Dense(3)
 ])
 
-
 predictions = model(features)
-predictions[:5]
+# predictions[:5]
 
 tf.nn.softmax(predictions[:5])
 
@@ -96,7 +106,6 @@ def grad(model, inputs, targets):
 
 optimizer = tf.keras.optimizers.SGD(learning_rate=0.01)
 
-
 loss_value, grads = grad(model, features, labels)
 
 print("Step: {}, Initial Loss: {}".format(optimizer.iterations.numpy(),
@@ -106,6 +115,7 @@ optimizer.apply_gradients(zip(grads, model.trainable_variables))
 
 print("Step: {},         Loss: {}".format(optimizer.iterations.numpy(),
                                           loss(model, features, labels, training=True).numpy()))
+
 
 ## Note: Rerunning this cell uses the same model variables
 
@@ -153,7 +163,6 @@ axes[1].set_xlabel("Epoch", fontsize=14)
 axes[1].plot(train_accuracy_results)
 plt.show()
 
-
 test_url = "https://storage.googleapis.com/download.tensorflow.org/data/iris_test.csv"
 
 test_fp = tf.keras.utils.get_file(fname=os.path.basename(test_url),
@@ -171,7 +180,6 @@ test_dataset = test_dataset.map(pack_features_vector)
 
 test_accuracy = tf.keras.metrics.Accuracy()
 
-
 for (x, y) in test_dataset:
   # training=False is needed only if there are layers with different
   # behavior during training versus inference (e.g. Dropout).
@@ -182,7 +190,6 @@ for (x, y) in test_dataset:
 print("Test set accuracy: {:.3%}".format(test_accuracy.result()))
 
 tf.stack([y, prediction], axis=1)
-
 
 predict_dataset = tf.convert_to_tensor([
     [5.1, 3.3, 1.7, 0.5,],
@@ -199,6 +206,9 @@ for i, logits in enumerate(predictions):
   p = tf.nn.softmax(logits)[class_idx]
   name = class_names[class_idx]
   print("Example {} prediction: {} ({:4.1f}%)".format(i, name, 100*p))
+
+
+
 
 
 

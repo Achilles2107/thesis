@@ -47,6 +47,7 @@ for feat, spec in dataset.take(5):
   print ('Features: {}, Species: {}'.format(feat, spec))
 
 train_dataset = dataset.shuffle(len(train)).batch(40)
+# train_dataset = dataset.batch(120)
 
 print(train.shape)  # we have 120 entires with 4 features)
 
@@ -67,7 +68,7 @@ initial_model.summary()
 
 # history = initial_model.fit(train, train_y, epochs=10, validation_data=(test, test_y),)
 
-training_history = initial_model.fit(train_dataset, epochs=15, validation_data=(test, test_y),)
+training_history = initial_model.fit(train_dataset, epochs=200, validation_data=(test, test_y),)
 
 # initial_model.save('saved_model/iris_classification')
 
@@ -86,6 +87,7 @@ plt.ylabel('accuracy')
 plt.xlabel('epoch')
 plt.legend(['train', 'test'], loc='upper left')
 plt.show()
+
 # summarize history for loss
 plt.plot(training_history.history['loss'])
 plt.plot(training_history.history['val_loss'])
@@ -95,7 +97,8 @@ plt.xlabel('epoch')
 plt.legend(['train', 'test'], loc='upper left')
 plt.show()
 
-# Federated Learning
+
+# federated_learning
 federated = False
 
 if federated == True:
@@ -115,7 +118,7 @@ if federated == True:
     NUM_CLIENTS = 5
     BATCH_SIZE = 40
 
-    train_dataset = dataset
+    train_data = dataset
 
     # Wrap a Keras model for use with TFF.
     def model_fn():

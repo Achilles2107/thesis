@@ -18,6 +18,8 @@ print(source)
 # Pick a subset of client devices to participate in training.
 train_data = [client_data(n) for n in range(3)] #[12312412124][2352345]
 
+# [Batch1, Batch2, Batch3]
+
 print(train_data)
 
 
