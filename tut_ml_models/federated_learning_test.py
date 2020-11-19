@@ -4,7 +4,11 @@ import tensorflow_federated as tff
 # Load simulation data.
 source, _ = tff.simulation.datasets.emnist.load_data()
 
-print(source)
+
+import h5py
+
+
+print(type(source))
 
 def client_data(n):
   return source.create_tf_dataset_for_client(source.client_ids[n]).map(
@@ -15,7 +19,9 @@ def client_data(n):
 # Pick a subset of client devices to participate in training.
 train_data = [client_data(n) for n in range(3)] #[12312412124][2352345]
 
-print(train_data[0].element_spec)
+for i in train_data:
+    print(type(train_data[0].element_spec))
+    print(train_data[0].element_spec)
 
 
 # Wrap a Keras model for use with TFF.

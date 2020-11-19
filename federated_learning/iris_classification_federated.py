@@ -15,6 +15,9 @@ train_dataset_url = "https://storage.googleapis.com/download.tensorflow.org/data
 train_dataset_fp = tf.keras.utils.get_file(fname=os.path.basename(train_dataset_url),
                                            origin=train_dataset_url)
 
+train_dataset_fp2 = tf.keras.utils.get_file(fname=os.path.basename(train_dataset_url),
+                                           origin=train_dataset_url)
+
 print("Local copy of the dataset file: {}".format(train_dataset_fp))
 
 df = pd.read_csv(train_dataset_fp)
@@ -43,54 +46,40 @@ train_dataset = tf.data.experimental.make_csv_dataset(
     label_name=label_name,
     num_epochs=1)
 
+train_dataset2 = tf.data.experimental.make_csv_dataset(
+    train_dataset_fp2,
+    batch_size,
+    column_names=column_names,
+    label_name=label_name,
+    num_epochs=1)
+
 features, labels = next(iter(train_dataset))
 
-# print(features)
-
-# Create Graph for Features Groups
-plt.scatter(features['petal_length'],
-            features['sepal_length'],
-            c=labels,
-            cmap='viridis')
-
-plt.xlabel("Petal length")
-plt.ylabel("Sepal length")
-plt.show()
-
-
-dataset_train = tf.data.Dataset.from_tensor_slices(df.values[:-1])
+dataset_train = tf.data.Dataset.from_tensor_slices(df.values)
 print(dataset_train)
 
-NUM_CLIENTS = 10
-NUM_EPOCHS = 5
-BATCH_SIZE = 20
-SHUFFLE_BUFFER = 100
-PREFETCH_BUFFER = 10
+# for i in dataset_train:
+#     print(dataset_train)
+
+client_train_dataset = col.OrderedDict()
+client_train_dataset['client01'] = dataset_train
 
 
-def preprocess(dataset):
-
-  def batch_format_fn(element):
-    return col.OrderedDict()
-    d['client01'] = dataset_train
-    d['client02'] = dataset_train
-
-  return dataset.repeat(NUM_EPOCHS).batch(
-      BATCH_SIZE).map(batch_format_fn).prefetch(PREFETCH_BUFFER)
-
+#train_dataset = tff.simulation.FromTensorSlicesClientData(client_train_dataset)
+# client1 + dataset
 
 # federated_learning
 
 # Wrap a Keras model for use with TFF.
 def model_fn():
   model = tf.keras.models.Sequential([
-      tf.keras.layers.Dense(10, activation=tf.nn.relu, input_shape=(4,)),  # input shape required
+      tf.keras.layers.Dense(10, activation=tf.nn.relu, input_shape=(1, )),  # input shape required
       tf.keras.layers.Dense(10, activation=tf.nn.relu),
       tf.keras.layers.Dense(3)
   ])
   return tff.learning.from_keras_model(
       model,
-      input_spec=train_dataset,
+      input_spec=train_dataset2.element_spec,
       loss=tf.keras.losses.SparseCategoricalCrossentropy(),
       metrics=[tf.keras.metrics.SparseCategoricalAccuracy()])
 
@@ -101,7 +90,7 @@ trainer = tff.learning.build_federated_averaging_process(
   client_optimizer_fn=lambda: tf.keras.optimizers.SGD(0.1))
 state = trainer.initialize()
 for _ in range(5):
-  state, metrics = trainer.next(state, train_dataset)
+  state, metrics = trainer.next(state, client_train_dataset)
   print (metrics)
 
 

@@ -76,7 +76,7 @@ model = tf.keras.Sequential([
 ])
 
 predictions = model(features)
-# predictions[:5]
+predictions[:5]
 
 tf.nn.softmax(predictions[:5])
 

@@ -19,8 +19,8 @@ CSV_COLUMN_NAMES = [
 ]
 LABEL = ['0', '1', '2', '3', '4']
 
-train_path = '/datasets/fan_lermer/20201113-131356/combined_csv.csv'
-test_path = '/datasets/fan_lermer/20201113-131523/combined_csv.csv'
+train_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\datasets\\fan_lermer\\20201113-131356\\combined_csv.csv'
+test_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\datasets\\fan_lermer\\20201113-131523\\combined_csv.csv'
 
 # train = pd.read_csv(train_path, names=CSV_COLUMN_NAMES, header=0)
 # train.reindex(np.random.permutation(train.index))
