@@ -97,6 +97,10 @@ print("example_element")
 print(example_element)
 
 
+cldata = col.OrderedDict()
+cldata['client01'] = train_dataset
+cldata['client02'] = train_dataset
+
 # client_data = preprocess(train_dataset1)
 # print(client_data.element_spec)
 
@@ -121,6 +125,6 @@ trainer = tff.learning.build_federated_averaging_process(
   client_optimizer_fn=lambda: tf.keras.optimizers.SGD(0.1))
 state = trainer.initialize()
 for _ in range(5):
-  state, metrics = trainer.next(state, example_dataset)
-  print (metrics)
+  state, metrics = trainer.next(state, cldata)
+  print(metrics)
 
