@@ -15,9 +15,6 @@ train_dataset_url = "https://storage.googleapis.com/download.tensorflow.org/data
 train_dataset_fp = tf.keras.utils.get_file(fname=os.path.basename(train_dataset_url),
                                            origin=train_dataset_url)
 
-train_dataset_fp2 = tf.keras.utils.get_file(fname=os.path.basename(train_dataset_url),
-                                           origin=train_dataset_url)
-
 print("Local copy of the dataset file: {}".format(train_dataset_fp))
 
 df = pd.read_csv(train_dataset_fp)
@@ -46,13 +43,6 @@ train_dataset = tf.data.experimental.make_csv_dataset(
     label_name=label_name,
     num_epochs=1)
 
-train_dataset2 = tf.data.experimental.make_csv_dataset(
-    train_dataset_fp2,
-    batch_size,
-    column_names=column_names,
-    label_name=label_name,
-    num_epochs=1)
-
 features, labels = next(iter(train_dataset))
 
 dataset_train = tf.data.Dataset.from_tensor_slices(df.values)
@@ -64,12 +54,6 @@ print(dataset_train)
 client_train_dataset = col.OrderedDict()
 client_train_dataset['client01'] = dataset_train
 
-
-#train_dataset = tff.simulation.FromTensorSlicesClientData(client_train_dataset)
-# client1 + dataset
-
-# federated_learning
-
 # Wrap a Keras model for use with TFF.
 def model_fn():
   model = tf.keras.models.Sequential([
@@ -79,7 +63,7 @@ def model_fn():
   ])
   return tff.learning.from_keras_model(
       model,
-      input_spec=train_dataset2.element_spec,
+      input_spec=train_dataset.element_spec,
       loss=tf.keras.losses.SparseCategoricalCrossentropy(),
       metrics=[tf.keras.metrics.SparseCategoricalAccuracy()])
 
