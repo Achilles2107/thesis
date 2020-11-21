@@ -13,9 +13,6 @@ train_dataset_fp = tf.keras.utils.get_file(fname=os.path.basename(train_dataset_
 
 print("Local copy of the dataset file: {}".format(train_dataset_fp))
 
-df = pd.read_csv(train_dataset_fp)
-df.head()
-
 # column order in CSV file
 column_names = ['sepal_length', 'sepal_width', 'petal_length', 'petal_width', 'species']
 
@@ -41,7 +38,9 @@ train_dataset = tf.data.experimental.make_csv_dataset(
 
 features, labels = next(iter(train_dataset))
 
+print('Features: ')
 print(features)
+print('Features Ende')
 
 # Create Graph for Features Groups
 plt.scatter(features['petal_length'],
