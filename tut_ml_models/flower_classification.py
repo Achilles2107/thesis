@@ -98,7 +98,7 @@ plt.legend(['train', 'test'], loc='upper left')
 plt.show()
 
 
-# federated_learning
+# federated_learning_iris
 federated = False
 
 if federated == True:
