@@ -6,6 +6,10 @@ import tensorflow_federated as tff
 print("TensorFlow version: {}".format(tf.__version__))
 print("Eager execution: {}".format(tf.executing_eagerly()))
 
+# Parameter
+batch_size = 32
+epochs = 200
+
 dataset_path_local = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\datasets\\iris_classification\\'
 
 train_dataset_url = "https://storage.googleapis.com/download.tensorflow.org/data/iris_training.csv"
@@ -31,8 +35,6 @@ print("Label: {}".format(label_name))
 
 class_names = ['Iris setosa', 'Iris versicolor', 'Iris virginica']
 
-batch_size = 32
-
 
 def create_train_dataset(file_path, filename):
     train_dataset = tf.data.experimental.make_csv_dataset(
@@ -44,7 +46,13 @@ def create_train_dataset(file_path, filename):
     return train_dataset
 
 
-# CVS from Google
+def pack_features_vector(features, labels):
+  """Pack the features into a single array."""
+  features = tf.stack(list(features.values()), axis=1)
+  return features, labels
+
+
+# CVS from Tensorflow
 train_dataset = tf.data.experimental.make_csv_dataset(
     train_dataset_fp,
     batch_size,
@@ -52,7 +60,7 @@ train_dataset = tf.data.experimental.make_csv_dataset(
     label_name=label_name,
     num_epochs=1)
 
-# CVS from Google
+# CVS from Tensorflow
 test_dataset = tf.data.experimental.make_csv_dataset(
     test_fp,
     batch_size,
@@ -63,13 +71,14 @@ test_dataset = tf.data.experimental.make_csv_dataset(
 
 # Dataset for Random CSV
 train_dataset01 = create_train_dataset(dataset_path_local, 'iris_random01.csv')
+train_dataset02 = create_train_dataset(dataset_path_local, 'iris_random02.csv')
 
 # Datasets Sorted by Species
 dataset_versicolor = create_train_dataset(dataset_path_local, 'iris_versicolor.csv')
 dataset_setosa = create_train_dataset(dataset_path_local, 'iris_setosa.csv')
 dataset_virginica = create_train_dataset(dataset_path_local, 'iris_virginica.csv')
 
-
+# Graphs
 # Train Dataset Features
 features, labels = next(iter(train_dataset))
 
@@ -82,6 +91,7 @@ plt.scatter(features['petal_length'],
 
 plt.xlabel("Petal length")
 plt.ylabel("Sepal length")
+plt.title("Train Dataset")
 plt.show()
 
 # Train Dataset 01 Features
@@ -96,18 +106,67 @@ plt.scatter(features['petal_length'],
 
 plt.xlabel("Petal length")
 plt.ylabel("Sepal length")
+plt.title("Generated CSV File")
+plt.show()
+
+features, labels = next(iter(train_dataset02))
+
+# Train Dataset02 Features
+plt.scatter(features['petal_length'],
+            features['sepal_length'],
+            c=labels,
+            cmap='viridis')
+
+plt.xlabel("Petal length")
+plt.ylabel("Sepal length")
+plt.title("Train Dataset 02")
+plt.show()
+
+features, labels = next(iter(dataset_setosa))
+
+# Dataset Setosa Features
+plt.scatter(features['petal_length'],
+            features['sepal_length'],
+            c=labels,
+            cmap='viridis')
+
+plt.xlabel("Petal length")
+plt.ylabel("Sepal length")
+plt.title("Setosa")
+plt.show()
+
+features, labels = next(iter(dataset_versicolor))
+
+# Dataset Versicolor Features
+plt.scatter(features['petal_length'],
+            features['sepal_length'],
+            c=labels,
+            cmap='viridis')
+
+plt.xlabel("Petal length")
+plt.ylabel("Sepal length")
+plt.title("Versicolor")
 plt.show()
 
 
-def pack_features_vector(features, labels):
-  """Pack the features into a single array."""
-  features = tf.stack(list(features.values()), axis=1)
-  return features, labels
+features, labels = next(iter(dataset_virginica))
+
+# Dataset Virginica Features
+plt.scatter(features['petal_length'],
+            features['sepal_length'],
+            c=labels,
+            cmap='viridis')
+
+plt.xlabel("Petal length")
+plt.ylabel("Sepal length")
+plt.title("Virginica")
+plt.show()
 
 
 #Pack Datasets
 train_dataset = train_dataset.map(pack_features_vector)
 train_dataset01 = train_dataset01.map(pack_features_vector)  # Random CSV Dataset
+train_dataset02 = train_dataset02.map(pack_features_vector)  # Random CSV Dataset
 test_dataset = test_dataset.map(pack_features_vector)
 
 dataset_versicolor = dataset_versicolor.map(pack_features_vector)
@@ -117,10 +176,10 @@ dataset_setosa = dataset_setosa.map(pack_features_vector)
 features, labels = next(iter(train_dataset))
 print(features[:5])
 
+# Create Lists with Dataset per Client
 sorted_datasets = [dataset_setosa, dataset_virginica, dataset_versicolor]
-train_datasets = [train_dataset, train_dataset01]
+train_datasets = [train_dataset, train_dataset01, train_dataset02]
 test_datasets = [test_dataset, test_dataset]
-
 
 
 def create_keras_model():
@@ -144,8 +203,8 @@ def model_fn():
 
 iterative_process = tff.learning.build_federated_averaging_process(
     model_fn,
-    client_optimizer_fn=lambda: tf.keras.optimizers.SGD(learning_rate=0.01),
-    server_optimizer_fn=lambda: tf.keras.optimizers.SGD(learning_rate=1.0))
+    client_optimizer_fn=lambda: tf.keras.optimizers.SGD(learning_rate=0.01),  # for each Client
+    server_optimizer_fn=lambda: tf.keras.optimizers.SGD(learning_rate=1.0))  # for Global model
 
 str(iterative_process.initialize.type_signature)
 
@@ -153,16 +212,18 @@ str(iterative_process.initialize.type_signature)
 state = iterative_process.initialize()
 
 
-NUM_ROUNDS = 201
-for round_num in range(1, NUM_ROUNDS):
-  state, metrics = iterative_process.next(state, sorted_datasets)
+for round_num in range(epochs):
+  state, metrics = iterative_process.next(state, train_datasets)
   print('round {:2d}, metrics={}'.format(round_num, metrics))
 
 
 # Evaluation
+# Model Evaluation
+test_accuracy = tf.keras.metrics.Accuracy()
+
+
 evaluation = tff.learning.build_federated_evaluation(model_fn)
 
 train_metrics = evaluation(state.model, test_datasets)
 
 print(str(train_metrics))
-

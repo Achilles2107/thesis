@@ -4,8 +4,11 @@ import random
 records = 120
 print("Making %d records\n" % records)
 
+file_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\Scripts'
+
 fieldnames = ['sepal_length', 'sepal_width', 'petal_length', 'petal_width', 'species']
-writer = csv.DictWriter(open("/iris_random01.csv", "w", newline=''), fieldnames=fieldnames)
+writer = csv.DictWriter(open(file_path + "/iris_random02.csv", "w", newline=''), fieldnames=fieldnames)
+
 
 column_names = ['sepal_length', 'sepal_width', 'petal_length', 'petal_width', 'species']
 

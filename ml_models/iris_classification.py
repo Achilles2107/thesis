@@ -2,9 +2,12 @@ import os
 import matplotlib.pyplot as plt
 import tensorflow as tf
 
-
 print("TensorFlow version: {}".format(tf.__version__))
 print("Eager execution: {}".format(tf.executing_eagerly()))
+
+# Parameter
+batch_size = 32
+epochs = 200
 
 train_dataset_url = "https://storage.googleapis.com/download.tensorflow.org/data/iris_training.csv"
 
@@ -29,8 +32,6 @@ print("Label: {}".format(label_name))
 
 class_names = ['Iris setosa', 'Iris versicolor', 'Iris virginica']
 
-batch_size = 32
-
 train_dataset = tf.data.experimental.make_csv_dataset(
     train_dataset_fp,
     batch_size,
@@ -46,6 +47,7 @@ test_dataset = tf.data.experimental.make_csv_dataset(
     num_epochs=1,
     shuffle=False)
 
+print("train_dataset Features")
 features, labels = next(iter(train_dataset))
 
 print(features)
@@ -130,9 +132,8 @@ print("Step: {},         Loss: {}".format(optimizer.iterations.numpy(),
 train_loss_results = []
 train_accuracy_results = []
 
-num_epochs = 201
 
-for epoch in range(num_epochs):
+for epoch in range(epochs):
   epoch_loss_avg = tf.keras.metrics.Mean()
   epoch_accuracy = tf.keras.metrics.SparseCategoricalAccuracy()
 
