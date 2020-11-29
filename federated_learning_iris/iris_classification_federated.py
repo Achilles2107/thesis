@@ -1,14 +1,22 @@
 import os
 import matplotlib.pyplot as plt
 import tensorflow as tf
+from tensorflow import keras
 import tensorflow_federated as tff
+from datetime import datetime
 
 print("TensorFlow version: {}".format(tf.__version__))
 print("Eager execution: {}".format(tf.executing_eagerly()))
 
+# Tensorboard
+now = datetime.now()
+logdir = "logs/scalars/" + now.strftime("%Y%m%d-%H%M%S")
+file_writer = tf.summary.create_file_writer(logdir + "/metrics")
+file_writer.set_as_default()
+
 # Parameter
 batch_size = 32
-epochs = 200
+epochs = 20
 
 dataset_path_local = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\datasets\\iris_classification\\'
 
@@ -162,8 +170,7 @@ plt.ylabel("Sepal length")
 plt.title("Virginica")
 plt.show()
 
-
-#Pack Datasets
+# Pack Datasets
 train_dataset = train_dataset.map(pack_features_vector)
 train_dataset01 = train_dataset01.map(pack_features_vector)  # Random CSV Dataset
 train_dataset02 = train_dataset02.map(pack_features_vector)  # Random CSV Dataset
@@ -201,6 +208,9 @@ def model_fn():
       metrics=[tf.keras.metrics.SparseCategoricalAccuracy()])
 
 
+log_dir = "logs/fit/" + now.strftime("%Y%m%d-%H%M%S")
+tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
+
 iterative_process = tff.learning.build_federated_averaging_process(
     model_fn,
     client_optimizer_fn=lambda: tf.keras.optimizers.SGD(learning_rate=0.01),  # for each Client
@@ -227,3 +237,5 @@ evaluation = tff.learning.build_federated_evaluation(model_fn)
 train_metrics = evaluation(state.model, test_datasets)
 
 print(str(train_metrics))
+
+

@@ -1,9 +1,13 @@
 import os
 import matplotlib.pyplot as plt
 import tensorflow as tf
+from datetime import datetime
 
 print("TensorFlow version: {}".format(tf.__version__))
 print("Eager execution: {}".format(tf.executing_eagerly()))
+
+# Tensorboard
+now = datetime.now()
 
 # Parameter
 batch_size = 32
@@ -80,6 +84,9 @@ model = tf.keras.Sequential([
   tf.keras.layers.Dense(10, activation=tf.nn.relu),
   tf.keras.layers.Dense(3)
 ])
+
+log_dir = "logs/fit/" + now.strftime("%Y%m%d-%H%M%S")
+tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
 
 # Make Predictions
 predictions = model(features)

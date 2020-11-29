@@ -157,10 +157,10 @@ result= df.isnull().sum().sum()
 print('NAN Werte: ', result)
 
 # NORMALIZATION of X Values
-# print(df[0:5])
+print(df[0:5])
 # separate array into input and output components
-# X = df.values[:,0:66]
-# Y = df.values[:,66]
+X = df.values[:,0:66]
+Y = df.values[:,66]
 
 X = df.values[:, 0:78]
 Y = df.values[:, 78]
@@ -198,11 +198,11 @@ print(Y)
 df.head()
 
 # remove rows with low variance, label has to be a number: 0,1,2..
-# threshold_n = 0.99
-# sel = VarianceThreshold(threshold=(threshold_n * (1 - threshold_n) ))
-# sel_var = sel.fit_transform(df)
-# df = df[df.columns[sel.get_support(indices=True)]]
-# df.head()
+threshold_n = 0.99
+sel = VarianceThreshold(threshold=(threshold_n * (1 - threshold_n) ))
+sel_var = sel.fit_transform(df)
+df = df[df.columns[sel.get_support(indices=True)]]
+df.head()
 
 # Create a test/train split.  33% test
 # Split into train/test
