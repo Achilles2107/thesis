@@ -85,6 +85,7 @@ model = tf.keras.Sequential([
   tf.keras.layers.Dense(3)
 ])
 
+
 log_dir = "logs/fit/" + now.strftime("%Y%m%d-%H%M%S")
 tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
 

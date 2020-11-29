@@ -4,21 +4,49 @@ import tensorflow as tf
 from tensorflow import keras
 import tensorflow_federated as tff
 from datetime import datetime
+import shutil
 
 print("TensorFlow version: {}".format(tf.__version__))
 print("Eager execution: {}".format(tf.executing_eagerly()))
 
+# Tensorboard Command
+# tensorboard --logdir C:\\Users\\Stefan\\PycharmProjects\\thesis\\logs\\
+
+# Filepaths
+logfile_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\logs\\'
+dataset_path_local = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\datasets\\iris_classification\\'
+
+# Remove Graph Log files and directories
+folder = str(logfile_path + 'graph\\')
+for filename in os.listdir(logfile_path):
+    file_path = os.path.join(logfile_path, filename)
+    try:
+        if os.path.isfile(file_path) or os.path.islink(file_path):
+            os.remove(file_path)
+    except Exception as e:
+        print('Failed to delete %s. Reason: %s' % (file_path, e))
+
+for filename in os.listdir(folder):
+    file_path = os.path.join(folder, filename)
+    try:
+        if os.path.isfile(file_path) or os.path.islink(file_path):
+            os.unlink(file_path)
+        elif os.path.isdir(file_path):
+            shutil.rmtree(file_path)
+    except Exception as e:
+        print('Failed to delete %s. Reason: %s' % (file_path, e))
+
+print('all logs removed')
+
 # Tensorboard
 now = datetime.now()
-logdir = "logs/scalars/" + now.strftime("%Y%m%d-%H%M%S")
-file_writer = tf.summary.create_file_writer(logdir + "/metrics")
-file_writer.set_as_default()
+# Define the Keras TensorBoard callback.
+logdir = logfile_path +"\\graph\\" + datetime.now().strftime("%Y%m%d-%H%M%S")
+tensorboard_callback = keras.callbacks.TensorBoard(log_dir=logdir)
 
 # Parameter
 batch_size = 32
-epochs = 20
-
-dataset_path_local = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\datasets\\iris_classification\\'
+epochs = 5
 
 train_dataset_url = "https://storage.googleapis.com/download.tensorflow.org/data/iris_training.csv"
 
@@ -61,12 +89,21 @@ def pack_features_vector(features, labels):
 
 
 # CVS from Tensorflow
-train_dataset = tf.data.experimental.make_csv_dataset(
+train_dataset_iris_tensorflow = tf.data.experimental.make_csv_dataset(
     train_dataset_fp,
     batch_size,
     column_names=column_names,
     label_name=label_name,
     num_epochs=1)
+
+# CSV from Github
+train_dataset_iris_github = tf.data.experimental.make_csv_dataset(
+    train_dataset_fp,
+    batch_size,
+    column_names=column_names,
+    label_name=label_name,
+    num_epochs=1)
+
 
 # CVS from Tensorflow
 test_dataset = tf.data.experimental.make_csv_dataset(
@@ -88,7 +125,7 @@ dataset_virginica = create_train_dataset(dataset_path_local, 'iris_virginica.csv
 
 # Graphs
 # Train Dataset Features
-features, labels = next(iter(train_dataset))
+features, labels = next(iter(train_dataset_iris_tensorflow))
 
 print(features)
 
@@ -171,7 +208,8 @@ plt.title("Virginica")
 plt.show()
 
 # Pack Datasets
-train_dataset = train_dataset.map(pack_features_vector)
+train_dataset_iris_tensorflow = train_dataset_iris_tensorflow.map(pack_features_vector)
+train_dataset_iris_github = train_dataset_iris_github.map(pack_features_vector)
 train_dataset01 = train_dataset01.map(pack_features_vector)  # Random CSV Dataset
 train_dataset02 = train_dataset02.map(pack_features_vector)  # Random CSV Dataset
 test_dataset = test_dataset.map(pack_features_vector)
@@ -180,12 +218,12 @@ dataset_versicolor = dataset_versicolor.map(pack_features_vector)
 dataset_virginica = dataset_virginica.map(pack_features_vector)
 dataset_setosa = dataset_setosa.map(pack_features_vector)
 
-features, labels = next(iter(train_dataset))
+features, labels = next(iter(train_dataset_iris_tensorflow))
 print(features[:5])
 
 # Create Lists with Dataset per Client
 sorted_datasets = [dataset_setosa, dataset_virginica, dataset_versicolor]
-train_datasets = [train_dataset, train_dataset01, train_dataset02]
+train_datasets = [train_dataset_iris_tensorflow, train_dataset_iris_github]
 test_datasets = [test_dataset, test_dataset]
 
 
@@ -203,13 +241,10 @@ def model_fn():
   keras_model = create_keras_model()
   return tff.learning.from_keras_model(
       keras_model,
-      input_spec=train_dataset.element_spec,
+      input_spec=train_dataset_iris_tensorflow.element_spec,
       loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
       metrics=[tf.keras.metrics.SparseCategoricalAccuracy()])
 
-
-log_dir = "logs/fit/" + now.strftime("%Y%m%d-%H%M%S")
-tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
 
 iterative_process = tff.learning.build_federated_averaging_process(
     model_fn,
@@ -221,16 +256,21 @@ str(iterative_process.initialize.type_signature)
 # Construct Server State
 state = iterative_process.initialize()
 
+# Tensorboard Writer
+summary_writer = tf.summary.create_file_writer(logfile_path)
 
 for round_num in range(epochs):
   state, metrics = iterative_process.next(state, train_datasets)
-  print('round {:2d}, metrics={}'.format(round_num, metrics))
-
+  with summary_writer.as_default():
+      for name, metric in metrics['train'].items():
+          tf.summary.scalar(name, metric, step=round_num)
+  train_metrics = metrics['train']
+  print('loss={l:.3f}, accuracy={a:.3f}'.format(
+        l=train_metrics['loss'], a=train_metrics['sparse_categorical_accuracy']))
 
 # Evaluation
 # Model Evaluation
 test_accuracy = tf.keras.metrics.Accuracy()
-
 
 evaluation = tff.learning.build_federated_evaluation(model_fn)
 
@@ -238,4 +278,4 @@ train_metrics = evaluation(state.model, test_datasets)
 
 print(str(train_metrics))
 
-
+print(str(evaluation.type_signature))
