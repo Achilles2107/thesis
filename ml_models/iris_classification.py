@@ -1,13 +1,45 @@
 import os
 import matplotlib.pyplot as plt
 import tensorflow as tf
+from tensorflow import keras
 from datetime import datetime
+import shutil
 
 print("TensorFlow version: {}".format(tf.__version__))
 print("Eager execution: {}".format(tf.executing_eagerly()))
 
+# Filepaths
+logfile_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\logs\\'
+dataset_path_local = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\datasets\\iris_classification\\'
+save_model_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\saved_model\\iris_model\\'
+
 # Tensorboard
 now = datetime.now()
+
+# Define the Keras TensorBoard callback.
+logdir = logfile_path + datetime.now().strftime("%Y%m%d-%H%M%S")
+tensorboard_callback = keras.callbacks.TensorBoard(log_dir=logdir)
+
+# Tensorboard Writer
+summary_writer = tf.summary.create_file_writer(logfile_path)
+
+# Tensorboard Command for CMD or Powershell
+# tensorboard --logdir C:\\Users\\Stefan\\PycharmProjects\\thesis\\logs\\
+
+
+# Remove other log files in /logs/
+folder = str(logfile_path)
+for filename in os.listdir(folder):
+    file_path = os.path.join(folder, filename)
+    try:
+        if os.path.isfile(file_path) or os.path.islink(file_path):
+            os.unlink(file_path)
+        elif os.path.isdir(file_path):
+            shutil.rmtree(file_path)
+    except Exception as e:
+        print('Failed to delete %s. Reason: %s' % (file_path, e))
+
+print('all logs removed')
 
 # Parameter
 batch_size = 32
@@ -85,10 +117,6 @@ model = tf.keras.Sequential([
   tf.keras.layers.Dense(3)
 ])
 
-
-log_dir = "logs/fit/" + now.strftime("%Y%m%d-%H%M%S")
-tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
-
 # Make Predictions
 predictions = model(features)
 predictions[:5]
@@ -140,12 +168,19 @@ print("Step: {},         Loss: {}".format(optimizer.iterations.numpy(),
 train_loss_results = []
 train_accuracy_results = []
 
+# Paths for Tensorboard
+current_time = now.strftime("%Y%m%d-%H%M%S")
+train_log_dir = logfile_path + '\\train_logs'
+test_log_dir = logfile_path + '\\test_logs'
+train_summary_writer = tf.summary.create_file_writer(train_log_dir)
+test_summary_writer = tf.summary.create_file_writer(test_log_dir)
+
 
 for epoch in range(epochs):
   epoch_loss_avg = tf.keras.metrics.Mean()
   epoch_accuracy = tf.keras.metrics.SparseCategoricalAccuracy()
 
-  # Training loop - using batches of 32
+  # Training loop
   for x, y in train_dataset:
     # Optimize the model
     loss_value, grads = grad(model, x, y)
@@ -158,9 +193,14 @@ for epoch in range(epochs):
     # behavior during training versus inference (e.g. Dropout).
     epoch_accuracy.update_state(y, model(x, training=True))
 
+    with train_summary_writer.as_default():
+        tf.summary.scalar('loss', epoch_loss_avg.result(), step=epoch)
+        tf.summary.scalar('accuracy', epoch_accuracy.result(), step=epoch)
+
   # End epoch
   train_loss_results.append(epoch_loss_avg.result())
   train_accuracy_results.append(epoch_accuracy.result())
+
 
   if epoch % 50 == 0:
     print("Epoch {:03d}: Loss: {:.3f}, Accuracy: {:.3%}".format(epoch,
@@ -181,12 +221,17 @@ for epoch in range(epochs):
 # Model Evaluation
 test_accuracy = tf.keras.metrics.Accuracy()
 
+
 for (x, y) in test_dataset:
   # training=False is needed only if there are layers with different
   # behavior during training versus inference (e.g. Dropout).
   logits = model(x, training=False)
   prediction = tf.argmax(logits, axis=1, output_type=tf.int32)
   test_accuracy(prediction, y)
+
+  with test_summary_writer.as_default():
+      tf.summary.scalar('accuracy', test_accuracy.result(), step=1)
+
 
 print("Test set accuracy: {:.3%}".format(test_accuracy.result()))
 

@@ -1,10 +1,28 @@
 import os
 import matplotlib.pyplot as plt
 import tensorflow as tf
+from tensorflow import keras
+from datetime import datetime
+import shutil
 
 
 print("TensorFlow version: {}".format(tf.__version__))
 print("Eager execution: {}".format(tf.executing_eagerly()))
+
+# Filepaths
+logfile_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\logs\\'
+dataset_path_local = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\datasets\\iris_classification\\'
+save_model_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\saved_model\\iris_model\\'
+
+# Tensorboard
+now = datetime.now()
+
+# Define the Keras TensorBoard callback.
+logdir = logfile_path + datetime.now().strftime("%Y%m%d-%H%M%S")
+tensorboard_callback = keras.callbacks.TensorBoard(log_dir=logdir)
+
+# Tensorboard Writer
+summary_writer = tf.summary.create_file_writer(logfile_path)
 
 # Parameter
 batch_size = 32
@@ -99,7 +117,8 @@ model.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=0.01),
 # Display the model's architecture
 model.summary()
 
-training_history = model.fit(train_dataset, epochs=epochs, validation_data=(test_dataset))
+training_history = model.fit(train_dataset, epochs=epochs, validation_data=(test_dataset),
+                             callbacks=[tensorboard_callback])
 
 # Prediction using the Model with unlabeled examples
 
