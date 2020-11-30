@@ -26,21 +26,6 @@ summary_writer = tf.summary.create_file_writer(logfile_path)
 # Tensorboard Command for CMD or Powershell
 # tensorboard --logdir C:\\Users\\Stefan\\PycharmProjects\\thesis\\logs\\
 
-
-# Remove other log files in /logs/
-folder = str(logfile_path)
-for filename in os.listdir(folder):
-    file_path = os.path.join(folder, filename)
-    try:
-        if os.path.isfile(file_path) or os.path.islink(file_path):
-            os.unlink(file_path)
-        elif os.path.isdir(file_path):
-            shutil.rmtree(file_path)
-    except Exception as e:
-        print('Failed to delete %s. Reason: %s' % (file_path, e))
-
-print('all logs removed')
-
 # Parameter
 batch_size = 32
 epochs = 200
@@ -68,6 +53,17 @@ print("Label: {}".format(label_name))
 
 class_names = ['Iris setosa', 'Iris versicolor', 'Iris virginica']
 
+# Path to CSV from GITHUB
+github_dataset = dataset_path_local + 'iris_training02.csv'
+
+# CSV from Github
+train_dataset_iris_github = tf.data.experimental.make_csv_dataset(
+    github_dataset,
+    batch_size,
+    column_names=column_names,
+    label_name=label_name,
+    num_epochs=1)
+
 train_dataset = tf.data.experimental.make_csv_dataset(
     train_dataset_fp,
     batch_size,
@@ -82,6 +78,7 @@ test_dataset = tf.data.experimental.make_csv_dataset(
     label_name='species',
     num_epochs=1,
     shuffle=False)
+
 
 print("train_dataset Features")
 features, labels = next(iter(train_dataset))
@@ -106,6 +103,7 @@ def pack_features_vector(features, labels):
 
 train_dataset = train_dataset.map(pack_features_vector)
 test_dataset = test_dataset.map(pack_features_vector)
+#train_dataset = train_dataset_iris_github.map(pack_features_vector)
 
 features, labels = next(iter(train_dataset))
 

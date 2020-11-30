@@ -45,8 +45,8 @@ logdir = logfile_path + "\\graph\\" + datetime.now().strftime("%Y%m%d-%H%M%S")
 tensorboard_callback = keras.callbacks.TensorBoard(log_dir=logdir)
 
 # Parameter
-batch_size = 32
-epochs = 5
+batch_size = 30
+epochs = 200
 
 train_dataset_url = "https://storage.googleapis.com/download.tensorflow.org/data/iris_training.csv"
 
@@ -88,6 +88,9 @@ def pack_features_vector(features, labels):
   return features, labels
 
 
+# Path to CSV from GITHUB
+github_dataset = dataset_path_local + 'iris_training02.csv'
+
 # CVS from Tensorflow
 train_dataset_iris_tensorflow = tf.data.experimental.make_csv_dataset(
     train_dataset_fp,
@@ -98,7 +101,7 @@ train_dataset_iris_tensorflow = tf.data.experimental.make_csv_dataset(
 
 # CSV from Github
 train_dataset_iris_github = tf.data.experimental.make_csv_dataset(
-    train_dataset_fp,
+    github_dataset,
     batch_size,
     column_names=column_names,
     label_name=label_name,
@@ -238,7 +241,7 @@ print(features[:5])
 
 # Create Lists with Dataset per Client
 sorted_datasets = [dataset_setosa, dataset_virginica, dataset_versicolor]
-train_datasets = [train_dataset_iris_tensorflow, train_dataset_iris_github]
+train_datasets = [train_dataset_iris_tensorflow, train_dataset01]
 test_datasets = [test_dataset, test_dataset]
 
 
@@ -269,18 +272,15 @@ iterative_process = tff.learning.build_federated_averaging_process(
 # Tensorboard Writer
 summary_writer = tf.summary.create_file_writer(logfile_path)
 
+tf.summary.trace_on(graph=True, profiler=True)
 # Construct Server State
 state = iterative_process.initialize()
-
-
-tf.summary.trace_on(graph=True, profiler=True)
-state, metrics = iterative_process.next(state, train_datasets)
 with summary_writer.as_default():
   tf.summary.trace_export(
-      name="Federated Test Round",
+      name="Federated iterative process init",
       step=0,
       profiler_outdir=logfile_path)
-print('round  1, metrics={}'.format(metrics))
+
 
 for round_num in range(epochs):
   state, metrics = iterative_process.next(state, train_datasets)
@@ -288,7 +288,7 @@ for round_num in range(epochs):
       for name, metric in metrics['train'].items():
           tf.summary.scalar(name, metric, step=round_num)
   train_metrics = metrics['train']
-  print('loss={l:.3f}, accuracy={a:.3f}'.format(
+  print('round ' + str(round_num) + ' loss={l:.3f}, accuracy={a:.3f}'.format(
         l=train_metrics['loss'], a=train_metrics['sparse_categorical_accuracy']))
 
 # Print content of metrics['train']
