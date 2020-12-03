@@ -7,8 +7,8 @@ dataset_path_local = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\datasets\\iris
 split_data_path = dataset_path_local + 'split\\'
 
 
-def read_csv(path):
-    df = pd.read_csv(path + "iris_training.csv")
+def read_csv(path, filename):
+    df = pd.read_csv(path + filename)
     return df
 
 
@@ -31,7 +31,7 @@ def write_to_csv(df, parts, path):
         df[i].to_csv(path + str(i + 1) + '.csv', index=False)
 
 
-df = read_csv(dataset_path_local)
+df = read_csv(dataset_path_local, "iris_training.csv")
 df_shuffled = shuffle_csv(df, 5)
 df_splitted = split_csv(df_shuffled, 3)
 write_to_csv(df_splitted, 3, split_data_path)

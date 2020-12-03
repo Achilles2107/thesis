@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow import keras
 from datetime import datetime
-import shutil
 
 print("TensorFlow version: {}".format(tf.__version__))
 print("Eager execution: {}".format(tf.executing_eagerly()))
@@ -12,6 +11,8 @@ print("Eager execution: {}".format(tf.executing_eagerly()))
 logfile_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\logs\\'
 dataset_path_local = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\datasets\\iris_classification\\'
 save_model_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\saved_model\\iris_model\\'
+split_data_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\datasets\\iris_classification\\split\\'
+
 
 # Tensorboard
 now = datetime.now()
@@ -53,8 +54,36 @@ print("Label: {}".format(label_name))
 
 class_names = ['Iris setosa', 'Iris versicolor', 'Iris virginica']
 
+# Labels
+# Iris setosa = 0
+# Iris versicolor = 1
+# Iris virginica = 2
+
 # Path to CSV from GITHUB
 github_dataset = dataset_path_local + 'iris_training02.csv'
+
+
+# For Datasets with Feature and Label Names in the actual File
+def create_train_dataset(file_path, filename):
+    train_dataset = tf.data.experimental.make_csv_dataset(
+    file_path + filename,
+    batch_size,
+    #column_names=column_names,
+    label_name=label_name,
+    num_epochs=1)
+    return train_dataset
+
+
+# For Datasets without Feature and Label Names in the actual File
+def create_train_dataset_with_col_name(file_path, filename):
+    train_dataset = tf.data.experimental.make_csv_dataset(
+    file_path + filename,
+    batch_size,
+    column_names=column_names,
+    label_name=label_name,
+    num_epochs=1)
+    return train_dataset
+
 
 # CSV from Github
 train_dataset_iris_github = tf.data.experimental.make_csv_dataset(
@@ -101,9 +130,22 @@ def pack_features_vector(features, labels):
   return features, labels
 
 
-train_dataset = train_dataset.map(pack_features_vector)
+# Datasets Sorted by Species
+dataset_versicolor = create_train_dataset_with_col_name(dataset_path_local, 'iris_versicolor.csv')
+dataset_setosa = create_train_dataset_with_col_name(dataset_path_local, 'iris_setosa.csv')
+dataset_virginica = create_train_dataset_with_col_name(dataset_path_local, 'iris_virginica.csv')
+
+# Pack Datasets
+# Sorted Datasets
+dataset_versicolor = dataset_versicolor.map(pack_features_vector)
+dataset_virginica = dataset_virginica.map(pack_features_vector)
+dataset_setosa = dataset_setosa.map(pack_features_vector)
+# Dataset from Tensorflow
+# train_dataset = train_dataset.map(pack_features_vector)
 test_dataset = test_dataset.map(pack_features_vector)
-#train_dataset = train_dataset_iris_github.map(pack_features_vector)
+# #train_dataset = train_dataset_iris_github.map(pack_features_vector)
+
+train_dataset = dataset_versicolor
 
 features, labels = next(iter(train_dataset))
 
@@ -243,11 +285,20 @@ predict_dataset = tf.convert_to_tensor([
     [6.9, 3.1, 5.4, 2.1]
 ])
 
+predict_dataset_sorted = tf.convert_to_tensor([
+    [5.0, 2.3, 3.3, 1.0, ],  # versicolor
+    [7.0, 3.2, 4.7, 1.4, ],  # versicolor
+    [5.0, 2.4, 3.8, 1.1, ],  # versicolor
+    [7.7, 3.8, 6.7, 2.2, ],  # virginica
+    [5.8, 2.8, 5.1, 2.4, ],  # virginica
+    [6.3, 2.5, 5.0, 1.9]  # virginica
+])
+
 # training=False is needed only if there are layers with different
 # behavior during training versus inference (e.g. Dropout).
-predictions = model(predict_dataset, training=False)
+predictions = model(predict_dataset_sorted, training=False)
 
-for i, logits in enumerate(predictions):
+for i, logits in enumerate(predict_dataset_sorted):
   class_idx = tf.argmax(logits).numpy()
   p = tf.nn.softmax(logits)[class_idx]
   name = class_names[class_idx]

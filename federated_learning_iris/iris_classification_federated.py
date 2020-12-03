@@ -4,7 +4,6 @@ import tensorflow as tf
 from tensorflow import keras
 import tensorflow_federated as tff
 from datetime import datetime
-import shutil
 
 print("TensorFlow version: {}".format(tf.__version__))
 print("Eager execution: {}".format(tf.executing_eagerly()))
@@ -15,39 +14,9 @@ print("Eager execution: {}".format(tf.executing_eagerly()))
 # Filepaths
 logfile_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\logs\\'
 dataset_path_local = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\datasets\\iris_classification\\'
-
-# # Remove Graph Log files and directories
-# folder = str(logfile_path + 'graph\\')
-# for filename in os.listdir(logfile_path):
-#     file_path = os.path.join(logfile_path, filename)
-#     try:
-#         if os.path.isfile(file_path) or os.path.islink(file_path):
-#             os.remove(file_path)
-#     except Exception as e:
-#         print('Failed to delete %s. Reason: %s' % (file_path, e))
-#
-# for filename in os.listdir(folder):
-#     file_path = os.path.join(folder, filename)
-#     try:
-#         if os.path.isfile(file_path) or os.path.islink(file_path):
-#             os.unlink(file_path)
-#         elif os.path.isdir(file_path):
-#             shutil.rmtree(file_path)
-#     except Exception as e:
-#         print('Failed to delete %s. Reason: %s' % (file_path, e))
-#
-# print('all logs removed')
-
-# Tensorboard
-now = datetime.now()
-# Define the Keras TensorBoard callback.
-logdir = logfile_path + "\\graph\\" + datetime.now().strftime("%Y%m%d-%H%M%S")
-tensorboard_callback = keras.callbacks.TensorBoard(log_dir=logdir)
-
-# Parameter
-batch_size = 30
-epochs = 200
-
+split_data_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\datasets\\iris_classification\\split\\'
+# Path to CSV from GITHUB
+github_dataset = dataset_path_local + 'iris_training02.csv'
 train_dataset_url = "https://storage.googleapis.com/download.tensorflow.org/data/iris_training.csv"
 
 train_dataset_fp = tf.keras.utils.get_file(fname=os.path.basename(train_dataset_url),
@@ -59,6 +28,16 @@ test_url = "https://storage.googleapis.com/download.tensorflow.org/data/iris_tes
 
 test_fp = tf.keras.utils.get_file(fname=os.path.basename(test_url),
                                   origin=test_url)
+
+# Tensorboard
+now = datetime.now()
+# Define the Keras TensorBoard callback.
+logdir = logfile_path + "\\graph\\" + datetime.now().strftime("%Y%m%d-%H%M%S")
+tensorboard_callback = keras.callbacks.TensorBoard(log_dir=logdir)
+
+# Parameter
+batch_size = 30
+epochs = 200
 
 # column order in CSV file
 column_names = ['sepal_length', 'sepal_width', 'petal_length', 'petal_width', 'species']
@@ -72,6 +51,7 @@ print("Label: {}".format(label_name))
 class_names = ['Iris setosa', 'Iris versicolor', 'Iris virginica']
 
 
+# For Datasets with Feature and Label Names in the actual File
 def create_train_dataset(file_path, filename):
     train_dataset = tf.data.experimental.make_csv_dataset(
     file_path + filename,
@@ -82,16 +62,37 @@ def create_train_dataset(file_path, filename):
     return train_dataset
 
 
+# For Datasets without Feature and Label Names in the actual File
+def create_train_dataset_with_col_name(file_path, filename):
+    train_dataset = tf.data.experimental.make_csv_dataset(
+    file_path + filename,
+    batch_size,
+    column_names=column_names,
+    label_name=label_name,
+    num_epochs=1)
+    return train_dataset
+
+
+# Packs features in a single array
 def pack_features_vector(features, labels):
-  """Pack the features into a single array."""
   features = tf.stack(list(features.values()), axis=1)
   return features, labels
 
 
-# Path to CSV from GITHUB
-github_dataset = dataset_path_local + 'iris_training02.csv'
+def make_graph(dataset, title):
+    features, labels = next(iter(train_dataset_iris_tensorflow))
+    plt.scatter(features['petal_length'],
+            features['sepal_length'],
+            c=labels,
+            cmap='viridis')
 
-# CVS from Tensorflow
+    plt.xlabel("Petal length")
+    plt.ylabel("Sepal length")
+    plt.title(title)
+    plt.show()
+
+
+# Traindata CVS from Tensorflow
 train_dataset_iris_tensorflow = tf.data.experimental.make_csv_dataset(
     train_dataset_fp,
     batch_size,
@@ -99,7 +100,7 @@ train_dataset_iris_tensorflow = tf.data.experimental.make_csv_dataset(
     label_name=label_name,
     num_epochs=1)
 
-# CSV from Github
+# Traindata CSV from Github
 train_dataset_iris_github = tf.data.experimental.make_csv_dataset(
     github_dataset,
     batch_size,
@@ -107,8 +108,7 @@ train_dataset_iris_github = tf.data.experimental.make_csv_dataset(
     label_name=label_name,
     num_epochs=1)
 
-
-# CVS from Tensorflow
+# Testdata CSV from Tensorflow
 test_dataset = tf.data.experimental.make_csv_dataset(
     test_fp,
     batch_size,
@@ -126,104 +126,25 @@ dataset_versicolor = create_train_dataset(dataset_path_local, 'iris_versicolor.c
 dataset_setosa = create_train_dataset(dataset_path_local, 'iris_setosa.csv')
 dataset_virginica = create_train_dataset(dataset_path_local, 'iris_virginica.csv')
 
-# Graphs
-# Train Dataset Features
-features, labels = next(iter(train_dataset_iris_tensorflow))
+# Splitted Datasets
+split_dataset01 = create_train_dataset_with_col_name(split_data_path, '1.csv')
+split_dataset02 = create_train_dataset_with_col_name(split_data_path, '2.csv')
+split_dataset03 = create_train_dataset_with_col_name(split_data_path, '3.csv')
 
-print(features)
 
-plt.scatter(features['petal_length'],
-            features['sepal_length'],
-            c=labels,
-            cmap='viridis')
-
-plt.xlabel("Petal length")
-plt.ylabel("Sepal length")
-plt.title("Train Dataset Tensorflow")
-plt.show()
-
+# Graphs for Dataset Features
+# Tensorflow Dataset
+make_graph(train_dataset_iris_tensorflow, 'Tensorflow Iris Dataset')
 # Traindataset GITHUB CSV
-features, labels = next(iter(train_dataset_iris_github))
-
-print(features)
-
-plt.scatter(features['petal_length'],
-            features['sepal_length'],
-            c=labels,
-            cmap='viridis')
-
-plt.xlabel("Petal length")
-plt.ylabel("Sepal length")
-plt.title("Train Dataset GITHUB")
-plt.show()
-
-# Train Dataset 01 Features
-features, labels = next(iter(train_dataset01))
-
-print(features)
-
-plt.scatter(features['petal_length'],
-            features['sepal_length'],
-            c=labels,
-            cmap='viridis')
-
-plt.xlabel("Petal length")
-plt.ylabel("Sepal length")
-plt.title("Generated CSV File")
-plt.show()
-
-features, labels = next(iter(train_dataset02))
-
-# Train Dataset02 Features
-plt.scatter(features['petal_length'],
-            features['sepal_length'],
-            c=labels,
-            cmap='viridis')
-
-plt.xlabel("Petal length")
-plt.ylabel("Sepal length")
-plt.title("Train Dataset 02")
-plt.show()
-
-features, labels = next(iter(dataset_setosa))
-
-# Dataset Setosa Features
-plt.scatter(features['petal_length'],
-            features['sepal_length'],
-            c=labels,
-            cmap='viridis')
-
-plt.xlabel("Petal length")
-plt.ylabel("Sepal length")
-plt.title("Setosa")
-plt.show()
-
-features, labels = next(iter(dataset_versicolor))
-
-# Dataset Versicolor Features
-plt.scatter(features['petal_length'],
-            features['sepal_length'],
-            c=labels,
-            cmap='viridis')
-
-plt.xlabel("Petal length")
-plt.ylabel("Sepal length")
-plt.title("Versicolor")
-plt.show()
-
-
-features, labels = next(iter(dataset_virginica))
-
-# Dataset Virginica Features
-plt.scatter(features['petal_length'],
-            features['sepal_length'],
-            c=labels,
-            cmap='viridis')
-
-plt.xlabel("Petal length")
-plt.ylabel("Sepal length")
-plt.title("Virginica")
-plt.show()
+make_graph(train_dataset_iris_github, 'Train Dataset GITHUB')
+# Split Dataset 01
+make_graph(split_dataset01, "Split Dataset 01")
+make_graph(split_dataset02, "Split Dataset 02")
+make_graph(split_dataset03, "Split Dataset 03")
+# Sorted Datasets
+make_graph(dataset_setosa, "Dataset Setosa")
+make_graph(dataset_versicolor, "Dataset Versicolor")
+make_graph(dataset_virginica, "Dataset Virgincia")
 
 # Pack Datasets
 train_dataset_iris_tensorflow = train_dataset_iris_tensorflow.map(pack_features_vector)
@@ -232,19 +153,24 @@ train_dataset01 = train_dataset01.map(pack_features_vector)  # Random CSV Datase
 train_dataset02 = train_dataset02.map(pack_features_vector)  # Random CSV Dataset
 test_dataset = test_dataset.map(pack_features_vector)
 
+# Sorted Datasets
 dataset_versicolor = dataset_versicolor.map(pack_features_vector)
 dataset_virginica = dataset_virginica.map(pack_features_vector)
 dataset_setosa = dataset_setosa.map(pack_features_vector)
 
-features, labels = next(iter(train_dataset_iris_tensorflow))
-print(features[:5])
+# Split Datasets
+split_dataset01 = split_dataset01.map(pack_features_vector)
+split_dataset02 = split_dataset02.map(pack_features_vector)
+split_dataset03 = split_dataset03.map(pack_features_vector)
 
 # Create Lists with Dataset per Client
 sorted_datasets = [dataset_setosa, dataset_virginica, dataset_versicolor]
 train_datasets = [train_dataset_iris_tensorflow, train_dataset01]
 test_datasets = [test_dataset, test_dataset]
+split_datasets = [split_dataset01, split_dataset02, split_dataset03]
 
 
+# New model creation needed  TFF wont accept anything out of Scope e.g. Tensors
 def create_keras_model():
   return tf.keras.models.Sequential([
       tf.keras.layers.Dense(10, activation=tf.nn.relu, input_shape=(4,)),  # input shape required
@@ -259,7 +185,9 @@ def model_fn():
   keras_model = create_keras_model()
   return tff.learning.from_keras_model(
       keras_model,
-      input_spec=train_dataset_iris_tensorflow.element_spec,
+      # Input information on what shape the input data will have
+      # Must be from type tf.Type or tf.TensorSpec
+      input_spec=dataset_setosa.element_spec,
       loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
       metrics=[tf.keras.metrics.SparseCategoricalAccuracy()])
 
@@ -281,9 +209,9 @@ with summary_writer.as_default():
       step=0,
       profiler_outdir=logfile_path)
 
-
-for round_num in range(epochs):
-  state, metrics = iterative_process.next(state, train_datasets)
+# Start Federated Learning process
+for round_num in range(1, epochs):
+  state, metrics = iterative_process.next(state, sorted_datasets)
   with summary_writer.as_default():
       for name, metric in metrics['train'].items():
           tf.summary.scalar(name, metric, step=round_num)
