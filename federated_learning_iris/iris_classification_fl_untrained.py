@@ -80,7 +80,7 @@ def pack_features_vector(features, labels):
 
 
 def make_graph(dataset, title):
-    features, labels = next(iter(train_dataset_iris_tensorflow))
+    features, labels = next(iter(dataset))
     plt.scatter(features['petal_length'],
             features['sepal_length'],
             c=labels,
@@ -92,7 +92,7 @@ def make_graph(dataset, title):
     plt.show()
 
 
-# Traindata CVS from Tensorflow
+# Traindata CSV from Tensorflow
 train_dataset_iris_tensorflow = tf.data.experimental.make_csv_dataset(
     train_dataset_fp,
     batch_size,
