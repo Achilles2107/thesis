@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow import keras
 from datetime import datetime
+from Preprocessing import PreprocessData
 
 print("TensorFlow version: {}".format(tf.__version__))
 print("Eager execution: {}".format(tf.executing_eagerly()))
@@ -10,141 +11,59 @@ print("Eager execution: {}".format(tf.executing_eagerly()))
 # Filepaths
 logfile_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\logs\\'
 dataset_path_local = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\datasets\\iris_classification\\'
-save_model_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\saved_model\\iris_model\\'
 split_data_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\datasets\\iris_classification\\split\\'
+saved_model_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\saved_model\\iris_model\\'
+# Path to CSV from GITHUB
+github_dataset = dataset_path_local + 'iris_training02.csv'
+train_dataset_url = "https://storage.googleapis.com/download.tensorflow.org/data/"
+test_url = "https://storage.googleapis.com/download.tensorflow.org/data/"
 
 # Tensorboard
 now = datetime.now()
-
 # Define the Keras TensorBoard callback.
-logdir = logfile_path + datetime.now().strftime("%Y%m%d-%H%M%S")
+logdir = logfile_path + "\\graph\\" + datetime.now().strftime("%Y%m%d-%H%M%S")
 tensorboard_callback = keras.callbacks.TensorBoard(log_dir=logdir)
 
-# Tensorboard Writer
-summary_writer = tf.summary.create_file_writer(logfile_path)
-
-# Tensorboard Command for CMD or Powershell
-# tensorboard --logdir C:\\Users\\Stefan\\PycharmProjects\\thesis\\logs\\
-
 # Parameter
-batch_size = 32
+batch_size = 30
 epochs = 200
 
-train_dataset_url = "https://storage.googleapis.com/download.tensorflow.org/data/iris_training.csv"
-
-train_dataset_fp = tf.keras.utils.get_file(fname=os.path.basename(train_dataset_url),
-                                           origin=train_dataset_url)
-
-print("Local copy of the dataset file: {}".format(train_dataset_fp))
-
-test_url = "https://storage.googleapis.com/download.tensorflow.org/data/iris_test.csv"
-
-test_fp = tf.keras.utils.get_file(fname=os.path.basename(test_url),
-                                  origin=test_url)
-
 # column order in CSV file
-column_names = ['sepal_length', 'sepal_width', 'petal_length', 'petal_width', 'species']
-
-feature_names = column_names[:-1]
-label_name = column_names[-1]
-
-print("Features: {}".format(feature_names))
-print("Label: {}".format(label_name))
-
-class_names = ['Iris setosa', 'Iris versicolor', 'Iris virginica']
-
 # Labels
 # Iris setosa = 0
 # Iris versicolor = 1
 # Iris virginica = 2
+column_names = ['sepal_length', 'sepal_width', 'petal_length', 'petal_width', 'species']
+feature_names = column_names[:-1]
+label_name = column_names[-1]
+class_names = ['Iris setosa', 'Iris versicolor', 'Iris virginica']
 
-# Path to CSV from GITHUB
-github_dataset = dataset_path_local + 'iris_training02.csv'
+# Path for saving weights
+checkpoint_path = saved_model_path + "cp.ckpt"
+checkpoint_dir = os.path.dirname(checkpoint_path)
 
+# Create train and test data
+# PreprocessData constructor usage
+# url, filename, label_name, batch_size, title, shuffle_value=True,  column_names=None)
+# Create Traindata
+train_data = PreprocessData.PreprocessData(train_dataset_url, 'iris_training.csv', label_name, batch_size,
+                                                  'Iris Train CSV Tensorflow', True, column_names)
+train_data.get_dataset_by_url()
+train_data.create_train_dataset()
+train_data.make_graph()
+train_data.map_dataset()
+train_dataset = train_data.dataset
 
-# For Datasets with Feature and Label Names in the actual File
-def create_train_dataset(file_path, filename):
-    train_dataset = tf.data.experimental.make_csv_dataset(
-    file_path + filename,
-    batch_size,
-    #column_names=column_names,
-    label_name=label_name,
-    num_epochs=1)
-    return train_dataset
+# Create Test Dataset
+test_data = PreprocessData.PreprocessData(test_url, 'iris_test.csv', label_name, batch_size,
+                                                  'Iris Test CSV Tensorflow', False, column_names)
 
+test_data.get_dataset_by_url()
+test_data.create_train_dataset()
+test_data.make_graph()
+test_data.map_dataset()
+test_dataset = test_data.dataset
 
-# For Datasets without Feature and Label Names in the actual File
-def create_train_dataset_with_col_name(file_path, filename):
-    train_dataset = tf.data.experimental.make_csv_dataset(
-    file_path + filename,
-    batch_size,
-    column_names=column_names,
-    label_name=label_name,
-    num_epochs=1)
-    return train_dataset
-
-
-# CSV from Github
-train_dataset_iris_github = tf.data.experimental.make_csv_dataset(
-    github_dataset,
-    batch_size,
-    column_names=column_names,
-    label_name=label_name,
-    num_epochs=1)
-
-train_dataset = tf.data.experimental.make_csv_dataset(
-    train_dataset_fp,
-    batch_size,
-    column_names=column_names,
-    label_name=label_name,
-    num_epochs=1)
-
-test_dataset = tf.data.experimental.make_csv_dataset(
-    test_fp,
-    batch_size,
-    column_names=column_names,
-    label_name='species',
-    num_epochs=1,
-    shuffle=False)
-
-
-print("train_dataset Features")
-features, labels = next(iter(train_dataset))
-
-print(features)
-
-plt.scatter(features['petal_length'],
-            features['sepal_length'],
-            c=labels,
-            cmap='viridis')
-
-plt.xlabel("Petal length")
-plt.ylabel("Sepal length")
-plt.show()
-
-
-def pack_features_vector(features, labels):
-  """Pack the features into a single array."""
-  features = tf.stack(list(features.values()), axis=1)
-  return features, labels
-
-
-# Datasets Sorted by Species
-dataset_versicolor = create_train_dataset_with_col_name(dataset_path_local, 'iris_versicolor.csv')
-dataset_setosa = create_train_dataset_with_col_name(dataset_path_local, 'iris_setosa.csv')
-dataset_virginica = create_train_dataset_with_col_name(dataset_path_local, 'iris_virginica.csv')
-
-# Pack Datasets
-# Sorted Datasets
-dataset_versicolor = dataset_versicolor.map(pack_features_vector)
-dataset_virginica = dataset_virginica.map(pack_features_vector)
-dataset_setosa = dataset_setosa.map(pack_features_vector)
-# Dataset from Tensorflow
-# train_dataset = train_dataset.map(pack_features_vector)
-test_dataset = test_dataset.map(pack_features_vector)
-# #train_dataset = train_dataset_iris_github.map(pack_features_vector)
-
-train_dataset = dataset_versicolor
 
 features, labels = next(iter(train_dataset))
 
