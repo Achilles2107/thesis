@@ -50,6 +50,9 @@ print("Label: {}".format(label_name))
 
 class_names = ['Iris setosa', 'Iris versicolor', 'Iris virginica']
 
+# PreprocessData constructor usage
+# url, filename, label_name, batch_size, title, shuffle_value=True,  column_names=None)
+
 
 # For Datasets with Feature and Label Names in the actual File
 def create_train_dataset(file_path, filename):
@@ -169,6 +172,7 @@ train_datasets = [train_dataset_iris_tensorflow, train_dataset01]
 test_datasets = [test_dataset, test_dataset]
 split_datasets = [split_dataset01, split_dataset02, split_dataset03]
 
+print(type(split_dataset01))
 
 # New model creation needed  TFF wont accept anything out of Scope e.g. Tensors
 def create_keras_model():
