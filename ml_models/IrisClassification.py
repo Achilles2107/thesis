@@ -3,7 +3,8 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow import keras
 from datetime import datetime
-from Preprocessing import PreprocessData
+from Outsourcing import PreprocessData
+
 
 print("TensorFlow version: {}".format(tf.__version__))
 print("Eager execution: {}".format(tf.executing_eagerly()))
@@ -13,6 +14,7 @@ logfile_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\logs\\'
 dataset_path_local = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\datasets\\iris_classification\\'
 split_data_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\datasets\\iris_classification\\split\\'
 saved_model_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\saved_model\\iris_model\\'
+
 # Path to CSV from GITHUB
 github_dataset = dataset_path_local + 'iris_training02.csv'
 train_dataset_url = "https://storage.googleapis.com/download.tensorflow.org/data/"
@@ -64,6 +66,30 @@ test_data.make_graph()
 test_data.map_dataset()
 test_dataset = test_data.dataset
 
+# Sorted Datasets
+data_setosa = PreprocessData.PreprocessData(dataset_path_local, 'iris_setosa.csv', label_name, batch_size,
+                                                  'Iris setosa Dataset', True, column_names)
+data_setosa.get_local_dataset()
+data_setosa.create_train_dataset()
+data_setosa.make_graph()
+data_setosa.map_dataset()
+dataset_setosa = data_setosa.dataset
+
+data_versicolor = PreprocessData.PreprocessData(dataset_path_local, 'iris_versicolor.csv', label_name, batch_size,
+                                                  'Iris versicolor Dataset', True, column_names)
+data_versicolor.get_local_dataset()
+data_versicolor.create_train_dataset()
+data_versicolor.make_graph()
+data_versicolor.map_dataset()
+dataset_versicolor = data_versicolor.dataset
+
+data_virginica = PreprocessData.PreprocessData(dataset_path_local, 'iris_versicolor.csv', label_name, batch_size,
+                                                  'Iris versicolor Dataset', True, column_names)
+data_virginica.get_local_dataset()
+data_virginica.create_train_dataset()
+data_virginica.make_graph()
+data_virginica.map_dataset()
+dataset_virginica = data_virginica.dataset
 
 features, labels = next(iter(train_dataset))
 
@@ -139,7 +165,7 @@ for epoch in range(epochs):
   epoch_accuracy = tf.keras.metrics.SparseCategoricalAccuracy()
 
   # Training loop
-  for x, y in train_dataset:
+  for x, y in dataset_setosa:
     # Optimize the model
     loss_value, grads = grad(model, x, y)
     optimizer.apply_gradients(zip(grads, model.trainable_variables))
@@ -165,16 +191,16 @@ for epoch in range(epochs):
                                                                 epoch_loss_avg.result(),
                                                                 epoch_accuracy.result()))
 
-    fig, axes = plt.subplots(2, sharex=True, figsize=(12, 8))
-    fig.suptitle('Training Metrics')
+fig, axes = plt.subplots(2, sharex=True, figsize=(12, 8))
+fig.suptitle('Training Metrics')
 
-    axes[0].set_ylabel("Loss", fontsize=14)
-    axes[0].plot(train_loss_results)
+axes[0].set_ylabel("Loss", fontsize=14)
+axes[0].plot(train_loss_results)
 
-    axes[1].set_ylabel("Accuracy", fontsize=14)
-    axes[1].set_xlabel("Epoch", fontsize=14)
-    axes[1].plot(train_accuracy_results)
-    plt.show()
+axes[1].set_ylabel("Accuracy", fontsize=14)
+axes[1].set_xlabel("Epoch", fontsize=14)
+axes[1].plot(train_accuracy_results)
+plt.show()
 
 # Model Evaluation
 test_accuracy = tf.keras.metrics.Accuracy()
@@ -195,6 +221,9 @@ print("Test set accuracy: {:.3%}".format(test_accuracy.result()))
 
 tf.stack([y, prediction], axis=1)
 
+print("pred per class")
+print(tf.nn.softmax(predictions[:5]))
+
 # Prediction using the Model with unlabeled examples
 
 predict_dataset = tf.convert_to_tensor([
@@ -209,7 +238,7 @@ predict_dataset_sorted = tf.convert_to_tensor([
     [5.0, 2.4, 3.8, 1.1, ],  # versicolor
     [7.7, 3.8, 6.7, 2.2, ],  # virginica
     [5.8, 2.8, 5.1, 2.4, ],  # virginica
-    [6.3, 2.5, 5.0, 1.9]  # virginica
+    [6.3, 2.5, 5.0, 1.9]     # virginica
 ])
 
 # training=False is needed only if there are layers with different
@@ -221,4 +250,3 @@ for i, logits in enumerate(predict_dataset_sorted):
   p = tf.nn.softmax(logits)[class_idx]
   name = class_names[class_idx]
   print("Example {} prediction: {} ({:4.1f}%)".format(i, name, 100*p))
-

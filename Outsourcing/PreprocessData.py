@@ -1,9 +1,6 @@
 import os
 import matplotlib.pyplot as plt
 import tensorflow as tf
-from tensorflow import keras
-import tensorflow_federated as tff
-from datetime import datetime
 
 
 class PreprocessData:
@@ -25,9 +22,11 @@ class PreprocessData:
         keras_url = self.url + self.filename
         self.file_path = tf.keras.utils.get_file(fname=os.path.basename(keras_url),
                                 origin=keras_url)
+        return print(self.file_path)
 
     def get_local_dataset(self):
         self.file_path = self.url + self.filename
+        return print(self.file_path)
 
     def create_train_dataset(self):
         dataset = tf.data.experimental.make_csv_dataset(

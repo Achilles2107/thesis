@@ -31,9 +31,15 @@ def write_to_csv(df, parts, path):
         df[i].to_csv(path + str(i + 1) + '.csv', index=False)
 
 
-df = read_csv(dataset_path_local, "iris_training.csv")
-df_shuffled = shuffle_csv(df, 5)
-df_splitted = split_csv(df_shuffled, 3)
-write_to_csv(df_splitted, 3, split_data_path)
-print("done")
+# df = read_csv(dataset_path_local, "iris_test.csv")
+# df_shuffled = shuffle_csv(df, 20)
+# df_splitted = split_csv(df_shuffled, 4)
+# write_to_csv(df_splitted, 4, split_data_path + 'test\\')
+# print("done")
 
+with open(dataset_path_local + 'split\\test\\3.csv', 'r') as f1:
+    original = f1.read()
+
+with open(dataset_path_local + 'split\\test\\123.csv', 'a') as f2:
+    f2.write('\n')
+    f2.write(original)

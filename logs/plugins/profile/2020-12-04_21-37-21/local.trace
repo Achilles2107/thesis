@@ -1,478 +1,0 @@
-
-¨ı¶
-	/host:CPUı‰G
-
-tf_Compute‰GÄt
-
-tf_ComputeÄtúg
-
-tf_Computeúgà9
-
-tf_Computeà9∏`
-
-tf_Compute∏`Ù<
-
-tf_ComputeÙ<†~
-
-tf_Compute†~úw
-
-tf_Computeúw∏I
-
-tf_Compute∏I§+
-
-tf_Compute§+àw
-
-tf_ComputeàwÙ
-
-tf_ComputeÙ
-®J
-
-tf_Compute®J»J
-
-tf_Compute»J∞u
-
-tf_Compute∞u
-ÏÏ
-åå®5
-
-tf_Compute®5	
-
-/device:GPU:0"*ıåTFE_DeleteTensorHandleH†¢∏Ó„$P†Àò"*ıåTFE_DeleteTensorHandleH†˜›Ù„$P†ñÄ")ıåTFE_DeleteTensorHandleHÄ›Çˆ„$P‡∆[")ıåTFE_DeleteTensorHandleH‡ÿˆˆ„$P†˜6")ıåTFE_DeleteTensorHandleH‡˜ø˜„$P¿Ñ=")ıåTFE_DeleteTensorHandleH†Ê≠¯„$P‡‹*")ıåTFE_DeleteTensorHandleHÄ¯¯„$P‡ëC"ıåtf.constantH¿ß§îº(PÄò¡;")ıåTFE_DeleteTensorHandleH‡±˝Ãº(P¿Ñ=",ıåTFE_Py_FastPathExecute_CH†ΩñÙº(P‡ûÇ0")ıåTFE_DeleteTensorHandleH†≤…ÄΩ(P†ç"%ıåTFE_DeleteTensorHandleH¿ì±ÅΩ(",ıåEagerExecute: LogicalAndH¿ú´ÇΩ(PÄ≤∂ "1ıåEagerLocalExecute: LogicalAndH¿Ü‹ÇΩ(P‡∫ˇ"0ıåValidateInputTypeAndPlacementH‡†ÏôΩ(PÄµ"&ıåEagerKernelExecuteH†•©öΩ(P†Ùü"Qıå
-LogicalAndHÄı˛õΩ(P†Ÿ±Z"
-	long_nameLogicalAnd:LogicalAndZ
-is_eager1",ıåTFE_Py_FastPathExecute_CH‡º”∫Ω(P†¡è"*ıåEagerExecute: IdentityHÄÄ∂¿Ω(PÄ™À"/ıåEagerLocalExecute: IdentityHÄµŒ¿Ω(PÄı≤"0ıåValidateInputTypeAndPlacementH†˙ Ω(P†ç"&ıåEagerKernelExecuteH¿≤ôÀΩ(P‡œ’"JıåIdentityHÄÏÓÀΩ(P†˜6Z
-	long_nameIdentity:IdentityZ
-is_eager1",ıåTFE_Py_FastPathExecute_CHÄÉÇ—Ω(P†¸’"ıåtf.constantH†‰˚Ω(P¿Ãç")ıåTFE_DeleteTensorHandleH‡…«Çæ(P†¬"ıåtf.constantHÄÍÖäæ(P†§ô")ıåTFE_DeleteTensorHandleHÄ≠∑éæ(PÄµ"ıåtf.constantHÄö¥üæ(PÄÃ´")ıåTFE_DeleteTensorHandleH†ÍÎ£æ(PÄµ",ıåTFE_Py_ExecuteCancelableH†øë™æ(PÄñÑ".ıåEagerExecute: WriteSummaryH‡øÛ¨æ(PÄëÂ"3ıåEagerLocalExecute: WriteSummaryH‡Ùã≠æ(P‡Œ∆"0ıåValidateInputTypeAndPlacementH†◊Ë¥æ(P¿ö"&ıåEagerKernelExecuteH‡¶çµæ(PÄı≤"WıåWriteSummaryHÄàıµæ(P‡©öZ&
-	long_nameWriteSummary:WriteSummaryZ
-is_eager1")ıåTFE_DeleteTensorHandleH‡¯õ√æ(P†˜6")ıåTFE_DeleteTensorHandleH†≤Ò√æ(PÄµ"%ıåTFE_DeleteTensorHandleH‡Åñƒæ("ıåtf.constantH†™ª»æ(P¿ÖÅ")ıåTFE_DeleteTensorHandleH¿ôºÕæ(P‡ß")ıåTFE_DeleteTensorHandleH†‹º–æ(PÄµ")ıåTFE_DeleteTensorHandleH†∆Ì–æ(P‡‹*")ıåTFE_DeleteTensorHandleH†®Ë’æ(P¿Ñ=")ıåTFE_DeleteTensorHandleH‡·Ω÷æ(P†ç"9ıÏprunedH†üÙ∆ÔP¿≈Ö‚IZ
-tf_function_callconcrete"-ıÏTFE_Py_ExecuteCancelableH‡¨¥¬P‡ÊîƒH":ıÏ%EagerExecute: __inference_pruned_4554H‡ÒÌ—P†…º≥H"?ıÏ*EagerLocalExecute: __inference_pruned_4554HÄûΩ“P†ı⁄≤H"2ıÏEagerCopyToDeviceAndAddCacheKeyHÄÚû”P¿ö"0ıÏValidateInputTypeAndPlacementH¿¬í≈≠PÄµ"FıÏEagerKernelExecuteH¿Àå∆≠P‡Û©æZ
-	step_name0Z
-group_id0"KıÏFunctionRunH¿æ∑«≠P‡êÑöZ
-id-1117459104371365358Z
-group_id0"RıÏExecutorState::ProcessH¿ Ü”ÆP†Üî
-Z
-id-1Z
-iter_num0Z
-group_id0"RıÏExecutorState::ProcessH†¬ü÷ÆP¿À…Z
-id-1Z
-iter_num0Z
-group_id0"UıÏ3_send_SGD/decay_1/Initializer/initial_value_0:_SendH¿ç∏◊ÆP†¨OZ
-group_id0"QıÏExecutorState::ProcessH‡¬ÅŸÆP‡∆[Z
-id-1Z
-iter_num0Z
-group_id0"]ıÏ;_send_SGD/learning_rate_1/Initializer/initial_value_0:_SendHÄ∫∏ŸÆPÄµZ
-group_id0"QıÏExecutorState::ProcessH¿æıŸÆP†¨OZ
-id-1Z
-iter_num0Z
-group_id0"LıÏ*_send_SGD/iter_1/Initializer/zeros_0:_SendH¿®¶⁄ÆP‡ßZ
-group_id0"QıÏExecutorState::ProcessH¿í◊⁄ÆPÄüIZ
-id-1Z
-iter_num0Z
-group_id0"FıÏ$_send_RestoreV2/tensor_names_0:_SendH¿¸á€ÆP‡ßZ
-group_id0"QıÏExecutorState::ProcessH†Ÿ≤€ÆPÄüIZ
-id-1Z
-iter_num0Z
-group_id0"JıÏ(_send_RestoreV2/shape_and_slices_0:_SendH†√„€ÆP‡ßZ
-group_id0"5ıÏ_send_Const_0:_SendH‡«†‹ÆP¿öZ
-group_id0"@ıÏExecutorDoneCallbackH†Åˆ‹ÆPÄµZ
-id-1Z
-group_id0"9ıÏprunedH†˛£ö„P‡Â€÷#Z
-tf_function_callconcrete"-ıÏTFE_Py_ExecuteCancelableH¿è∫∞„P¿çò#":ıÏ%EagerExecute: __inference_pruned_4585H¿˚Úª„PÄ¬Öã#"?ıÏ*EagerLocalExecute: __inference_pruned_4585H†¬Œº„PÄÓ£ä#"2ıÏEagerCopyToDeviceAndAddCacheKeyH‡∞ºΩ„P¿ö"0ıÏValidateInputTypeAndPlacementH¿°“œˇP‡ß"FıÏEagerKernelExecuteH†ù∆–ˇP†Ã–ıZ
-	step_name1Z
-group_id1"KıÏFunctionRunH†êÒ—ˇP†ß®«Z
-id-8340528819740473904Z
-group_id1",ıÏTFE_Py_FastPathExecute_CHÄ’ ™àPÄñÑ"3ıÏEagerExecute: DestroyResourceOpH¿ãâ≥àP‡ÕÇ"8ıÏ$EagerLocalExecute: DestroyResourceOpH‡Ç¿≥àP†…≈"0ıÏValidateInputTypeAndPlacementHÄ‘ªΩàPÄµ"5ıÏEagerKernelExecuteHÄÛÑæàP¿æÙZ
-group_id1"uıÏDestroyResourceOpH‡¬⁄øàP‡ÑÓZ0
-	long_name#DestroyResourceOp:DestroyResourceOpZ
-group_id1Z
-is_eager1",ıÏTFE_Py_FastPathExecute_CH‡§’ƒàPÄŸÄ"3ıÏEagerExecute: DestroyResourceOpH‡†˙∆àP‡öΩ"8ıÏ$EagerLocalExecute: DestroyResourceOpH†ªÜ«àPÄÛ™"0ıÏValidateInputTypeAndPlacementHÄò±«àP†ç"4ıÏEagerKernelExecuteH‡ø√«àP†·gZ
-group_id1"tıÏDestroyResourceOpHÄÇ‚«àP¿Ñ=Z0
-	long_name#DestroyResourceOp:DestroyResourceOpZ
-group_id1Z
-is_eager1",ıÏTFE_Py_FastPathExecute_CH‡ªË…àPÄ–Ü"3ıÏEagerExecute: DestroyResourceOpHÄÒ±ÀàP‡Â§"8ıÏ$EagerLocalExecute: DestroyResourceOpH†˛∑ÀàP†Àò",ıÏValidateInputTypeAndPlacementHÄ€‚Àà"4ıÏEagerKernelExecuteH¿ıÓÀàP‡∆[Z
-group_id1"tıÏDestroyResourceOpH‡∑çÃàPÄÍ0Z0
-	long_name#DestroyResourceOp:DestroyResourceOpZ
-group_id1Z
-is_eager1",ıÏTFE_Py_FastPathExecute_CH‡îÈÕàPÄÖü"3ıÏEagerExecute: DestroyResourceOpHÄïöœàP‡œ’"8ıÏ$EagerLocalExecute: DestroyResourceOpH¿Ø¶œàPÄ®√",ıÏValidateInputTypeAndPlacementHÄˇ œà"5ıÏEagerKernelExecuteH†å—œàPÄæíZ
-group_id1"tıÏDestroyResourceOpH¿ŒÔœàP†·gZ0
-	long_name#DestroyResourceOp:DestroyResourceOpZ
-group_id1Z
-is_eager1",ıÏTFE_Py_FastPathExecute_CH†àˆ—àP¿µ˙"3ıÏEagerExecute: DestroyResourceOpH¿Ωø”àP†Àò"8ıÏ$EagerLocalExecute: DestroyResourceOpH‡ ≈”àPÄæí",ıÏValidateInputTypeAndPlacementH†öÍ”à"4ıÏEagerKernelExecuteH¿ß”àPÄ‘aZ
-group_id1"tıÏDestroyResourceOpH‡Èé‘àP†˜6Z0
-	long_name#DestroyResourceOp:DestroyResourceOpZ
-group_id1Z
-is_eager1",ıÏTFE_Py_FastPathExecute_CHÄüÿ’àPÄ±Ω"3ıÏEagerExecute: DestroyResourceOpH¿˜ˆ÷àP¿£Ü"8ıÏ$EagerLocalExecute: DestroyResourceOpH‡Ñ˝÷àP†ñÄ"0ıÏValidateInputTypeAndPlacementH†‘°◊àP†ç"4ıÏEagerKernelExecuteH‡Ó≠◊àPÄüIZ
-group_id1"tıÏDestroyResourceOpHÄ±Ã◊àPÄµZ0
-	long_name#DestroyResourceOp:DestroyResourceOpZ
-group_id1Z
-is_eager1",ıÏTFE_Py_FastPathExecute_CH†±˝ÿàP¿µ˙"3ıÏEagerExecute: DestroyResourceOpH‡âú⁄àPÄ®√"8ıÏ$EagerLocalExecute: DestroyResourceOpHÄó¢⁄àP‡öΩ"0ıÏValidateInputTypeAndPlacementH†Ÿ¿⁄àP†ç"5ıÏEagerKernelExecuteH‡ÛÃ⁄àP‡∞åZ
-group_id1"tıÏDestroyResourceOpH‡®Â⁄àPÄ‘aZ0
-	long_name#DestroyResourceOp:DestroyResourceOpZ
-group_id1Z
-is_eager1",ıÏTFE_Py_FastPathExecute_CH‡∫Ÿ‹àP‡£∑"3ıÏEagerExecute: DestroyResourceOpHÄÜÚ›àP¿£Ü"7ıÏ$EagerLocalExecute: DestroyResourceOpH†ì¯›àPÄâz"0ıÏValidateInputTypeAndPlacementH¿’ñﬁàP†ç"4ıÏEagerKernelExecuteHÄ¢ﬁàPÄüIZ
-group_id1"tıÏDestroyResourceOpHÄ•ªﬁàP†¬Z0
-	long_name#DestroyResourceOp:DestroyResourceOpZ
-group_id1Z
-is_eager1",ıÏTFE_Py_FastPathExecute_CH¿≤ÚﬂàP¿µ˙"3ıÏEagerExecute: DestroyResourceOpH‡˝ä·àP†µ…"8ıÏ$EagerLocalExecute: DestroyResourceOpH†òó·àP‡öΩ",ıÏValidateInputTypeAndPlacementH¿⁄µ·à"5ıÏEagerKernelExecuteHÄı¡·àP‡∞åZ
-group_id1"tıÏDestroyResourceOpHÄ™⁄·àPÄ‘aZ0
-	long_name#DestroyResourceOp:DestroyResourceOpZ
-group_id1Z
-is_eager1",ıÏTFE_Py_FastPathExecute_CHÄºŒ„àP†Û€"3ıÏEagerExecute: DestroyResourceOpHÄØ˘‰àP†Àò"8ıÏ$EagerLocalExecute: DestroyResourceOpH†ºˇ‰àP‡∞å",ıÏValidateInputTypeAndPlacementH‡ã§Âà"4ıÏEagerKernelExecuteHÄô™ÂàP‡∆[Z
-group_id1"tıÏDestroyResourceOpH†€»ÂàPÄÍ0Z0
-	long_name#DestroyResourceOp:DestroyResourceOpZ
-group_id1Z
-is_eager1",ıÏTFE_Py_FastPathExecute_CH†ÉåÁàP†æ√"3ıÏEagerExecute: DestroyResourceOpH¿Œ§ËàPÄæí"8ıÏ$EagerLocalExecute: DestroyResourceOpH‡€™ËàP¿£Ü",ıÏValidateInputTypeAndPlacementH†´œËà"4ıÏEagerKernelExecuteH¿∏’ËàP¿πUZ
-group_id1"tıÏDestroyResourceOpH‡˙ÛËàP‡‹*Z0
-	long_name#DestroyResourceOp:DestroyResourceOpZ
-group_id1Z
-is_eager1",ıÏTFE_Py_FastPathExecute_CH¿ï±ÍàP‡ÿœ"3ıÏEagerExecute: DestroyResourceOpH¿”√ÎàP‡Â§"8ıÏ$EagerLocalExecute: DestroyResourceOpH‡‡…ÎàP¿ÿû"0ıÏValidateInputTypeAndPlacementHÄ£ËÎàP†ç"4ıÏEagerKernelExecuteH¿ΩÙÎàP¿ÓmZ
-group_id1"tıÏDestroyResourceOpH¿ÚåÏàP‡ëCZ0
-	long_name#DestroyResourceOp:DestroyResourceOpZ
-group_id1Z
-is_eager1",ıÏTFE_Py_FastPathExecute_CH†¬‚ÌàP†Û€"3ıÏEagerExecute: DestroyResourceOpH¿ç˚ÓàP†Ä±"8ıÏ$EagerLocalExecute: DestroyResourceOpH‡öÅÔàP‡Â§",ıÏValidateInputTypeAndPlacementH†Í•Ôà"4ıÏEagerKernelExecuteH¿˜´ÔàP‡˚sZ
-group_id1"tıÏDestroyResourceOpH¿¨ƒÔàP†¨OZ0
-	long_name#DestroyResourceOp:DestroyResourceOpZ
-group_id1Z
-is_eager1",ıÏTFE_Py_FastPathExecute_CH‡ñ¶ÒàP‡çË"3ıÏEagerExecute: DestroyResourceOpH‡‘∏ÚàP‡öΩ"8ıÏ$EagerLocalExecute: DestroyResourceOpHÄ‚æÚàP†Ä±"0ıÏValidateInputTypeAndPlacementH†§›ÚàP†ç"5ıÏEagerKernelExecuteH‡æÈÚàP†ñÄZ
-group_id1"tıÏDestroyResourceOpH‡ÛÅÛàP‡∆[Z0
-	long_name#DestroyResourceOp:DestroyResourceOpZ
-group_id1Z
-is_eager1",ıÏTFE_Py_FastPathExecute_CH†ÎÈÙàPÄÊ’"3ıÏEagerExecute: DestroyResourceOpH¿ÎöˆàP‡∞å"8ıÏ$EagerLocalExecute: DestroyResourceOpH‡¯†ˆàP¿£Ü",ıÏValidateInputTypeAndPlacementH†»≈ˆà"4ıÏEagerKernelExecuteH¿’ÀˆàP¿πUZ
-group_id1"tıÏDestroyResourceOpH‡óÍˆàP‡‹*Z0
-	long_name#DestroyResourceOp:DestroyResourceOpZ
-group_id1Z
-is_eager1",ıÏTFE_Py_FastPathExecute_CH†•°¯àP¿ñ±"3ıÏEagerExecute: DestroyResourceOpH¿π˘àP†ñÄ"7ıÏ$EagerLocalExecute: DestroyResourceOpH‡˝ø˘àPÄâz",ıÏValidateInputTypeAndPlacementH†Õ‰˘à"4ıÏEagerKernelExecuteH¿⁄Í˘àPÄüIZ
-group_id1"tıÏDestroyResourceOpH‡úâ˙àP†¬Z0
-	long_name#DestroyResourceOp:DestroyResourceOpZ
-group_id1Z
-is_eager1",ıÏTFE_Py_FastPathExecute_CH‡è¥˚àP‡ÿœ"3ıÏEagerExecute: DestroyResourceOpH‡Õ∆¸àP‡Â§"8ıÏ$EagerLocalExecute: DestroyResourceOpHÄ€Ã¸àP¿ÿû",ıÏValidateInputTypeAndPlacementH¿™Ò¸à"4ıÏEagerKernelExecuteHÄ≈˝¸àP†·gZ
-group_id1"tıÏDestroyResourceOpHÄ˙ï˝àP‡ëCZ0
-	long_name#DestroyResourceOp:DestroyResourceOpZ
-group_id1Z
-is_eager1",ıÏTFE_Py_FastPathExecute_CH¿ºÂ˛àP‡çË"3ıÏEagerExecute: DestroyResourceOpH¿˙˜ˇàP‡öΩ"8ıÏ$EagerLocalExecute: DestroyResourceOpH‡á˛ˇàP†Ä±",ıÏValidateInputTypeAndPlacementH†◊¢Äâ"5ıÏEagerKernelExecuteH¿‰®ÄâP†ñÄZ
-group_id1"tıÏDestroyResourceOpH‡¶«ÄâP¿πUZ0
-	long_name#DestroyResourceOp:DestroyResourceOpZ
-group_id1Z
-is_eager1",ıÏTFE_Py_FastPathExecute_CHÄë©ÇâPÄ±Ω"3ıÏEagerExecute: DestroyResourceOpH†‹¡ÉâP‡∞å"8ıÏ$EagerLocalExecute: DestroyResourceOpH¿È«ÉâP†ñÄ"0ıÏValidateInputTypeAndPlacementH‡´ÊÉâP†ç"4ıÏEagerKernelExecuteH†∆ÚÉâP†¨OZ
-group_id1"tıÏDestroyResourceOpH†˚äÑâP‡‹*Z0
-	long_name#DestroyResourceOp:DestroyResourceOpZ
-group_id1Z
-is_eager1",ıÏTFE_Py_FastPathExecute_CHÄñ»ÖâPÄ±Ω"3ıÏEagerExecute: DestroyResourceOpH†·‡ÜâP‡∞å"8ıÏ$EagerLocalExecute: DestroyResourceOpH¿ÓÊÜâP†ñÄ"0ıÏValidateInputTypeAndPlacementH‡∞ÖáâP†ç"4ıÏEagerKernelExecuteH†ÀëáâP†¨OZ
-group_id1"tıÏDestroyResourceOpH†Ä™áâP‡‹*Z0
-	long_name#DestroyResourceOp:DestroyResourceOpZ
-group_id1Z
-is_eager1",ıÏTFE_Py_FastPathExecute_CH‡ç·àâPÄ±Ω"3ıÏEagerExecute: DestroyResourceOpH‡ÀÛââPÄæí"8ıÏ$EagerLocalExecute: DestroyResourceOpHÄŸ˘ââP‡∞å",ıÏValidateInputTypeAndPlacementH¿®ûäâ"4ıÏEagerKernelExecuteHÄ√™äâP¿πUZ
-group_id1"tıÏDestroyResourceOpHÄ¯¬äâPÄÍ0Z0
-	long_name#DestroyResourceOp:DestroyResourceOpZ
-group_id1Z
-is_eager1",ıÏTFE_Py_FastPathExecute_CH‡íÄåâP¿ñ±"3ıÏEagerExecute: DestroyResourceOpH‡–íçâP¿£Ü"7ıÏ$EagerLocalExecute: DestroyResourceOpH†ÎûçâPÄâz",ıÏValidateInputTypeAndPlacementH¿≠Ωçâ"4ıÏEagerKernelExecuteHÄ»…çâPÄüIZ
-group_id1"tıÏDestroyResourceOpHÄ˝·çâP†¬Z0
-	long_name#DestroyResourceOp:DestroyResourceOpZ
-group_id1Z
-is_eager1")ıÏTFE_DeleteTensorHandleH†ì‚éâP¿πU")ıÏTFE_DeleteTensorHandleH†ú‹èâPÄµ")ıÏTFE_DeleteTensorHandleH‡ÎÄêâP‡‹*")ıÏTFE_DeleteTensorHandleH‡’±êâP†¬")ıÏTFE_DeleteTensorHandleH†•÷êâPÄµ")ıÏTFE_DeleteTensorHandleH‡Ù˙êâPÄµ")ıÏTFE_DeleteTensorHandleHÄ∑ôëâPÄµ")ıÏTFE_DeleteTensorHandleH†˘∑ëâP‡ß")ıÏTFE_DeleteTensorHandleH¿ª÷ëâP‡ß")ıÏTFE_DeleteTensorHandleH¿ÓëâPÄµ")ıÏTFE_DeleteTensorHandleH‡≤çíâPÄµ")ıÏTFE_DeleteTensorHandleHÄı´íâP‡ß")ıÏTFE_DeleteTensorHandleHÄ™ƒíâPÄµ")ıÏTFE_DeleteTensorHandleH†Ï‚íâP‡ß")ıÏTFE_DeleteTensorHandleH¿ÆÅìâPÄµ")ıÏTFE_DeleteTensorHandleH‡üìâP‡ß")ıÏTFE_DeleteTensorHandleH‡•∏ìâPÄµ")ıÏTFE_DeleteTensorHandleHÄË÷ìâPÄµ")ıÏTFE_DeleteTensorHandleH¿∑˚ìâPÄµ")ıÏTFE_DeleteTensorHandleH‡˘ôîâPÄµ")ıÏTFE_DeleteTensorHandleHÄº∏îâPÄµ")ıÏTFE_DeleteTensorHandleH†ÊÈ∫âP†˜6"dı†~ExecutorState::ProcessH¿„ËÔ∞P†ÀòZ
-id-1117459104371365358Z
-iter_num0Z
-group_id0"cıúgExecutorState::ProcessH†—¯Ñ±PÄ‘aZ
-id-1117459104371365358Z
-iter_num0Z
-group_id0"dıúgExecutorState::ProcessH¿∑¨ÎµPÄ§ËZ
-id-1117459104371365358Z
-iter_num0Z
-group_id0"tıúgAssignVariableOpH¿ıæÏµP¿ñ±Z0
-	long_name#AssignVariableOp_1:AssignVariableOpZ
-group_id0Z
-is_eager0"dıúgExecutorState::ProcessH‡“ÀÔµP¿≤Õ;Z
-id-1117459104371365358Z
-iter_num0Z
-group_id0"tıúgAssignVariableOpH†◊àµPÄƒﬂ:Z0
-	long_name#AssignVariableOp_3:AssignVariableOpZ
-group_id0Z
-is_eager0"dıúgExecutorState::ProcessH†Ùù«∂P†æ√Z
-id-1117459104371365358Z
-iter_num0Z
-group_id0"rıúgReadVariableOpH¿äû»∂P¿πUZ1
-	long_name$Read_9/ReadVariableOp:ReadVariableOpZ
-group_id0Z
-is_eager0"dıúgExecutorState::ProcessH†óê™ÑP†‚´Z
-id-8340528819740473904Z
-iter_num0Z
-group_id1"dıàwExecutorState::ProcessH†›â˛∞P†é¥6Z
-id-1117459104371365358Z
-iter_num0Z
-group_id0"dıàwExecutorState::ProcessH¿≥—ÌµP¿Î¿9Z
-id-1117459104371365358Z
-iter_num0Z
-group_id0"tıàwAssignVariableOpHÄåÓµP‡õÎ7Z0
-	long_name#AssignVariableOp_5:AssignVariableOpZ
-group_id0Z
-is_eager0"dıàwExecutorState::ProcessH†óê™ÑP†‚´Z
-id-8340528819740473904Z
-iter_num0Z
-group_id1"dıàwExecutorState::ProcessH†ΩÄπÑPÄæíZ
-id-8340528819740473904Z
-iter_num0Z
-group_id1"dıúwExecutorState::ProcessH†Ñâ˙∞P‡Â§Z
-id-1117459104371365358Z
-iter_num0Z
-group_id0"dıúwExecutorState::ProcessHÄ∆ßÚµP‡≈Å,Z
-id-1117459104371365358Z
-iter_num0Z
-group_id0"tıúwAssignVariableOpH†˚ÛµP‡˛Ù)Z0
-	long_name#AssignVariableOp_6:AssignVariableOpZ
-group_id0Z
-is_eager0"dıúwExecutorState::ProcessHÄ”û∑ÑPÄ±ΩZ
-id-8340528819740473904Z
-iter_num0Z
-group_id1"cıúwExecutorState::ProcessH‡‹´ºÑP†·gZ
-id-8340528819740473904Z
-iter_num0Z
-group_id1"dı§+ExecutorState::ProcessH†åøı∞P†Û€Z
-id-1117459104371365358Z
-iter_num0Z
-group_id0"dı§+ExecutorState::ProcessHÄÒÅÏµP¿≠ƒZ
-id-1117459104371365358Z
-iter_num0Z
-group_id0"tı§+AssignVariableOpH¿˛∏ÌµP¿Ê∑Z0
-	long_name#AssignVariableOp_4:AssignVariableOpZ
-group_id0Z
-is_eager0"dı§+ExecutorState::ProcessH†∞âÙµP¿‹òHZ
-id-1117459104371365358Z
-iter_num0Z
-group_id0"uı§+AssignVariableOpH¿‹ÿÙµPÄÓ™GZ1
-	long_name$AssignVariableOp_12:AssignVariableOpZ
-group_id0Z
-is_eager0"dı§+ExecutorState::ProcessHÄõÏ¡∂P‡‘ÙZ
-id-1117459104371365358Z
-iter_num0Z
-group_id0"sı§+ReadVariableOpH†¸”¬∂PÄÖüZ1
-	long_name$Read_6/ReadVariableOp:ReadVariableOpZ
-group_id0Z
-is_eager0"dı§+ExecutorState::ProcessH¿†Ì«∂P†ñÄZ
-id-1117459104371365358Z
-iter_num0Z
-group_id0"sı§+ReadVariableOpH¿äû»∂P†¬Z2
-	long_name%Read_11/ReadVariableOp:ReadVariableOpZ
-group_id0Z
-is_eager0"dı§+ExecutorState::ProcessH‡î€¥ÑP†®ÙZ
-id-8340528819740473904Z
-iter_num0Z
-group_id1"dı§+ExecutorState::ProcessH‡É´∏ÑPÄæíZ
-id-8340528819740473904Z
-iter_num0Z
-group_id1"cı§+ExecutorState::ProcessHÄÓå∫ÑPÄ‘aZ
-id-8340528819740473904Z
-iter_num0Z
-group_id1"dı‰GExecutorState::ProcessH†åøı∞P†Û€Z
-id-1117459104371365358Z
-iter_num0Z
-group_id0"dı‰GExecutorState::ProcessHÄﬂçÍµP‡¡ÒZ
-id-1117459104371365358Z
-iter_num0Z
-group_id0"uı‰GAssignVariableOpHÄá—ÎµPÄàÎZ1
-	long_name$AssignVariableOp_11:AssignVariableOpZ
-group_id0Z
-is_eager0"eı®5ExecutorState::ProcessH¿Í⁄Â∞P‡Æ∫“Z
-id-1117459104371365358Z
-iter_num0Z
-group_id0"^ı®5	RestoreV2H†»˛É±P¿™•ŸZ 
-	long_nameRestoreV2:RestoreV2Z
-group_id0Z
-is_eager0"uı®5AssignVariableOpH¿∞∫ıµP†ØÖBZ1
-	long_name$AssignVariableOp_13:AssignVariableOpZ
-group_id0Z
-is_eager0"dı®5ExecutorState::ProcessHÄ©Ö∆∂P†í•Z
-id-1117459104371365358Z
-iter_num0Z
-group_id0"sı®5ReadVariableOpH†øÖ«∂P¿£ÜZ1
-	long_name$Read_8/ReadVariableOp:ReadVariableOpZ
-group_id0Z
-is_eager0"dı®5ExecutorState::ProcessH¿Ùú≠ÑP‡¬ÄZ
-id-8340528819740473904Z
-iter_num0Z
-group_id1"dıÙExecutorState::ProcessH†åøı∞PÄÊ’Z
-id-1117459104371365358Z
-iter_num0Z
-group_id0"dıÙExecutorState::ProcessHÄ˘äÖ±P‡‘©Z
-id-1117459104371365358Z
-iter_num0Z
-group_id0"sıÙAssignVariableOpH¿ª⁄Ü±P†®©Z/
-	long_name"SGD/iter_1/Assign:AssignVariableOpZ
-group_id0Z
-is_eager0"dıÙExecutorState::ProcessH¿‡≥ÚµP†ÒÚ@Z
-id-1117459104371365358Z
-iter_num0Z
-group_id0"tıÙAssignVariableOpHÄœ°ÛµP‡ò‘?Z0
-	long_name#AssignVariableOp_9:AssignVariableOpZ
-group_id0Z
-is_eager0"dıÙExecutorState::ProcessH¿Êµƒ∂P†â´Z
-id-1117459104371365358Z
-iter_num0Z
-group_id0"rıÙReadVariableOpH¿ÔØ≈∂PÄüIZ1
-	long_name$Read_7/ReadVariableOp:ReadVariableOpZ
-group_id0Z
-is_eager0"dıÙExecutorState::ProcessH†Ùù«∂PÄæíZ
-id-1117459104371365358Z
-iter_num0Z
-group_id0"sıÙReadVariableOpH†ﬁŒ«∂P¿œ$Z2
-	long_name%Read_10/ReadVariableOp:ReadVariableOpZ
-group_id0Z
-is_eager0"dıÙExecutorState::ProcessHÄ¥’∂ÑPÄ–ÜZ
-id-8340528819740473904Z
-iter_num0Z
-group_id1"SıÙExecutorDoneCallbackH¿Ê∏¡ÑP‡Ô‚Z
-id-8340528819740473904Z
-group_id1"dı∏IExecutorState::ProcessHÄÅ‡…±P‡öΩZ
-id-1117459104371365358Z
-iter_num0Z
-group_id0"dı∏IExecutorState::ProcessH‡„˚ÎµPÄÃï6Z
-id-1117459104371365358Z
-iter_num0Z
-group_id0"tı∏IAssignVariableOpH‡™àÓµPÄõÿ3Z0
-	long_name#AssignVariableOp_2:AssignVariableOpZ
-group_id0Z
-is_eager0"dı∏IExecutorState::ProcessH†≤˛¨ÑPÄõÓZ
-id-8340528819740473904Z
-iter_num0Z
-group_id1"dıà9ExecutorState::ProcessH†åøı∞PÄÊ’Z
-id-1117459104371365358Z
-iter_num0Z
-group_id0"dıà9ExecutorState::ProcessH‡˜ ñ±P‡…ßZ
-id-1117459104371365358Z
-iter_num0Z
-group_id0"pıà9AssignVariableOpH¿›Ôó±PÄØÍZ,
-	long_namecount_2/Assign:AssignVariableOpZ
-group_id0Z
-is_eager0"dıà9ExecutorState::ProcessH¿œÉˆµP†™õWZ
-id-1117459104371365358Z
-iter_num0Z
-group_id0"uıà9AssignVariableOpHÄÛâ˜µP¿Ñ‹IZ1
-	long_name$AssignVariableOp_10:AssignVariableOpZ
-group_id0Z
-is_eager0"sıà9ReadVariableOpHÄÆ§…∂P¿πUZ2
-	long_name%Read_12/ReadVariableOp:ReadVariableOpZ
-group_id0Z
-is_eager0"dıà9ExecutorState::ProcessH†˜Ç§ÑP¿â‹Z
-id-8340528819740473904Z
-iter_num0Z
-group_id1"cıà9ExecutorState::ProcessH‡ü®®ÑP†¨OZ
-id-8340528819740473904Z
-iter_num0Z
-group_id1"cıà9ExecutorState::ProcessH‡®¢©ÑPÄüIZ
-id-8340528819740473904Z
-iter_num0Z
-group_id1"cıà9ExecutorState::ProcessH†óê™ÑP¿Ñ=Z
-id-8340528819740473904Z
-iter_num0Z
-group_id1"dıà9ExecutorState::ProcessHÄú˛´ÑP‡∞åZ
-id-8340528819740473904Z
-iter_num0Z
-group_id1"cıà9ExecutorState::ProcessH‡äùÆÑP¿πUZ
-id-8340528819740473904Z
-iter_num0Z
-group_id1"cıà9ExecutorState::ProcessH‡Á¯ØÑP†˜6Z
-id-8340528819740473904Z
-iter_num0Z
-group_id1"dıà9ExecutorState::ProcessH¿ÑæºÑP¿í÷Z
-id-8340528819740473904Z
-iter_num0Z
-group_id1"dıÄtExecutorState::ProcessH¿¡à˜∞P†â´Z
-id-1117459104371365358Z
-iter_num0Z
-group_id0"dıÄtExecutorState::ProcessH†£¥ıµP¿˝ 
-Z
-id-1117459104371365358Z
-iter_num0Z
-group_id0"tıÄtAssignVariableOpH‡∞ÎˆµP†ﬁ–Z0
-	long_name#AssignVariableOp_7:AssignVariableOpZ
-group_id0Z
-is_eager0"dı∏`ExecutorState::ProcessH¿é¯Å±P‡Ù†TZ
-id-1117459104371365358Z
-iter_num0Z
-group_id0"pı∏`AssignVariableOpH†≤ØÑ±P‡»„Z,
-	long_nametotal_2/Assign:AssignVariableOpZ
-group_id0Z
-is_eager0"dı∏`ExecutorState::ProcessH¿∑¨ÎµPÄˇ•+Z
-id-1117459104371365358Z
-iter_num0Z
-group_id0"rı∏`AssignVariableOpH†ºöÌµPÄÉÅ)Z.
-	long_name!AssignVariableOp:AssignVariableOpZ
-group_id0Z
-is_eager0"dı∏`ExecutorState::ProcessHÄÚÁ∑ÑPÄ–ÜZ
-id-8340528819740473904Z
-iter_num0Z
-group_id1"cı∏`ExecutorState::ProcessH¿œ•ºÑP¿ÓmZ
-id-8340528819740473904Z
-iter_num0Z
-group_id1"dı»JExecutorState::ProcessH†Ï±Ô∞P¿£ÜZ
-id-1117459104371365358Z
-iter_num0Z
-group_id0"cı»JExecutorState::ProcessH¿π“˚∞PÄÍ0Z
-id-1117459104371365358Z
-iter_num0Z
-group_id0"cı»JExecutorState::ProcessH‡ö∫¸∞PÄÍ0Z
-id-1117459104371365358Z
-iter_num0Z
-group_id0"cı»JExecutorState::ProcessH†Ûÿ˝∞PÄÍ0Z
-id-1117459104371365358Z
-iter_num0Z
-group_id0"cı»JExecutorState::ProcessH‡µ®ˇ∞PÄÍ0Z
-id-1117459104371365358Z
-iter_num0Z
-group_id0"cı»JExecutorState::ProcessH‡«úÅ±P‡‹*Z
-id-1117459104371365358Z
-iter_num0Z
-group_id0"dı»JExecutorState::ProcessHÄÙÎÅ±PÄÛ™Z
-id-1117459104371365358Z
-iter_num0Z
-group_id0"dı»JExecutorState::ProcessH¿∂ªÉ±PÄéŒZ
-id-1117459104371365358Z
-iter_num0Z
-group_id0"wı»JAssignVariableOpH¿©ÊÑ±PÄ±ÚZ3
-	long_name&SGD/momentum_1/Assign:AssignVariableOpZ
-group_id0Z
-is_eager0"cı∞uExecutorState::ProcessH‡∫«Ç±P¿πUZ
-id-1117459104371365358Z
-iter_num0Z
-group_id0"dı∞uExecutorState::ProcessHÄˆÛå±P†ÊÜZ
-id-1117459104371365358Z
-iter_num0Z
-group_id0"pı∞uAssignVariableOpH†åÙç±P‡ÿœZ,
-	long_nametotal_3/Assign:AssignVariableOpZ
-group_id0Z
-is_eager0"dı∞uExecutorState::ProcessH†∆´ë±P¿¡¿Z
-id-1117459104371365358Z
-iter_num0Z
-group_id0"tı∞uAssignVariableOpH¿Ω‚ë±PÄàÎZ0
-	long_name#SGD/decay_1/Assign:AssignVariableOpZ
-group_id0Z
-is_eager0"dı®JExecutorState::ProcessHÄñÃ˙∞P†µ…Z
-id-1117459104371365358Z
-iter_num0Z
-group_id0"dı®JExecutorState::ProcessH†ﬂëâ±P‡˘†Z
-id-1117459104371365358Z
-iter_num0Z
-group_id0"|ı®JAssignVariableOpHÄ€Öä±PÄﬂ„Z8
-	long_name+SGD/learning_rate_1/Assign:AssignVariableOpZ
-group_id0Z
-is_eager0"dı®JExecutorState::ProcessHÄ≠îò±P¿°≥Z
-id-1117459104371365358Z
-iter_num0Z
-group_id0"pı®JAssignVariableOpH‡®àô±P‡¶Z,
-	long_namecount_3/Assign:AssignVariableOpZ
-group_id0Z
-is_eager0"dıÙ<ExecutorState::ProcessH¿öâ˚∞P†ñÄZ
-id-1117459104371365358Z
-iter_num0Z
-group_id0"dıÙ<ExecutorState::ProcessH†‰›ÓµP¿ãŒ?Z
-id-1117459104371365358Z
-iter_num0Z
-group_id0"tıÙ<AssignVariableOpH†¢ÔµPÄ˛ñ>Z0
-	long_name#AssignVariableOp_8:AssignVariableOpZ
-group_id0Z
-is_eager0"SıÙ<ExecutorDoneCallbackH†™˙Ã∂PÄ˘ç
-Z
-id-1117459104371365358Z
-group_id0"dıÙ<ExecutorState::ProcessH¿êöùÑP¿≠˘Z
-id-8340528819740473904Z
-iter_num0Z
-group_id1

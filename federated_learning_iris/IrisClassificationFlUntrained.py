@@ -4,6 +4,9 @@ import tensorflow as tf
 from tensorflow import keras
 import tensorflow_federated as tff
 from datetime import datetime
+from Outsourcing import PreprocessData
+from Outsourcing import CustomMetrics
+import numpy as np
 
 print("TensorFlow version: {}".format(tf.__version__))
 print("Eager execution: {}".format(tf.executing_eagerly()))
@@ -14,20 +17,14 @@ print("Eager execution: {}".format(tf.executing_eagerly()))
 # Filepaths
 logfile_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\logs\\'
 dataset_path_local = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\datasets\\iris_classification\\'
-split_data_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\datasets\\iris_classification\\split\\'
+split_train_data_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\datasets\\iris_classification\\split\\train\\'
+split_test_data_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\datasets\\iris_classification\\split\\test\\'
+saved_model_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\saved_model\\iris_model\\'
+
 # Path to CSV from GITHUB
 github_dataset = dataset_path_local + 'iris_training02.csv'
-train_dataset_url = "https://storage.googleapis.com/download.tensorflow.org/data/iris_training.csv"
-
-train_dataset_fp = tf.keras.utils.get_file(fname=os.path.basename(train_dataset_url),
-                                           origin=train_dataset_url)
-
-print("Local copy of the dataset file: {}".format(train_dataset_fp))
-
-test_url = "https://storage.googleapis.com/download.tensorflow.org/data/iris_test.csv"
-
-test_fp = tf.keras.utils.get_file(fname=os.path.basename(test_url),
-                                  origin=test_url)
+train_dataset_url = "https://storage.googleapis.com/download.tensorflow.org/data/"
+test_url = "https://storage.googleapis.com/download.tensorflow.org/data/"
 
 # Tensorboard
 now = datetime.now()
@@ -50,129 +47,127 @@ print("Label: {}".format(label_name))
 
 class_names = ['Iris setosa', 'Iris versicolor', 'Iris virginica']
 
+# Creating test and train datasets
 # PreprocessData constructor usage
 # url, filename, label_name, batch_size, title, shuffle_value=True,  column_names=None)
 
+# Create Traindata
+train_data = PreprocessData.PreprocessData(train_dataset_url, 'iris_training.csv', label_name, batch_size,
+                                                  'Iris Train CSV Tensorflow', True, column_names)
+train_data.get_dataset_by_url()
+train_data.create_train_dataset()
+train_data.make_graph()
+train_data.map_dataset()
+train_dataset = train_data.dataset
 
-# For Datasets with Feature and Label Names in the actual File
-def create_train_dataset(file_path, filename):
-    train_dataset = tf.data.experimental.make_csv_dataset(
-    file_path + filename,
-    batch_size,
-    #column_names=column_names,
-    label_name=label_name,
-    num_epochs=1)
-    return train_dataset
+# Create Test Dataset
+test_data = PreprocessData.PreprocessData(test_url, 'iris_test.csv', label_name, batch_size,
+                                                  'Iris Test CSV Tensorflow', False, column_names)
 
+test_data.get_dataset_by_url()
+test_data.create_train_dataset()
+test_data.make_graph()
+test_data.map_dataset()
+test_dataset = test_data.dataset
 
-# For Datasets without Feature and Label Names in the actual File
-def create_train_dataset_with_col_name(file_path, filename):
-    train_dataset = tf.data.experimental.make_csv_dataset(
-    file_path + filename,
-    batch_size,
-    column_names=column_names,
-    label_name=label_name,
-    num_epochs=1)
-    return train_dataset
+# Create split test data
+split_test_data01 = PreprocessData.PreprocessData(split_test_data_path, '1.csv', label_name, batch_size,
+                                                  'Split Test Dataset 01', True, column_names)
+split_test_data01.get_local_dataset()
+split_test_data01.create_train_dataset()
+split_test_data01.make_graph()
+split_test_data01.map_dataset()
+split_testdataset01 = split_test_data01.dataset
 
+split_test_data02 = PreprocessData.PreprocessData(split_test_data_path, '2.csv', label_name, batch_size,
+                                                  'Split Test Dataset 02', True, column_names)
+split_test_data02.get_local_dataset()
+split_test_data02.create_train_dataset()
+split_test_data02.make_graph()
+split_test_data02.map_dataset()
+split_testdataset02 = split_test_data02.dataset
 
-# Packs features in a single array
-def pack_features_vector(features, labels):
-  features = tf.stack(list(features.values()), axis=1)
-  return features, labels
+split_test_data03 = PreprocessData.PreprocessData(split_test_data_path, '3.csv', label_name, batch_size,
+                                                  'Split Test Dataset 03', True, column_names)
+split_test_data03.get_local_dataset()
+split_test_data03.create_train_dataset()
+split_test_data03.make_graph()
+split_test_data03.map_dataset()
+split_testdataset03 = split_test_data01.dataset
 
+split_test_data03 = PreprocessData.PreprocessData(split_test_data_path, '4.csv', label_name, batch_size,
+                                                  'Split Test Dataset 04', True, column_names)
+split_test_data03.get_local_dataset()
+split_test_data03.create_train_dataset()
+split_test_data03.make_graph()
+split_test_data03.map_dataset()
+split_testdataset04 = split_test_data01.dataset
 
-def make_graph(dataset, title):
-    features, labels = next(iter(dataset))
-    plt.scatter(features['petal_length'],
-            features['sepal_length'],
-            c=labels,
-            cmap='viridis')
+# Create split train data
+split_data01 = PreprocessData.PreprocessData(split_train_data_path, '1.csv', label_name, batch_size,
+                                                  'Split Dataset 01', True, column_names)
+split_data01.get_local_dataset()
+split_data01.create_train_dataset()
+split_data01.make_graph()
+split_data01.map_dataset()
+split_dataset01 = split_data01.dataset
 
-    plt.xlabel("Petal length")
-    plt.ylabel("Sepal length")
-    plt.title(title)
-    plt.show()
+split_data02 = PreprocessData.PreprocessData(split_train_data_path, '2.csv', label_name, batch_size,
+                                                  'Split Dataset 02', True, column_names)
+split_data02.get_local_dataset()
+split_data02.create_train_dataset()
+split_data02.make_graph()
+split_data02.map_dataset()
+split_dataset02 = split_data02.dataset
 
+split_data03 = PreprocessData.PreprocessData(split_train_data_path, '3.csv', label_name, batch_size,
+                                                  'Split Dataset 03', True, column_names)
+split_data03.get_local_dataset()
+split_data03.create_train_dataset()
+split_data03.make_graph()
+split_data03.map_dataset()
+split_dataset03 = split_data03.dataset
 
-# Traindata CSV from Tensorflow
-train_dataset_iris_tensorflow = tf.data.experimental.make_csv_dataset(
-    train_dataset_fp,
-    batch_size,
-    column_names=column_names,
-    label_name=label_name,
-    num_epochs=1)
-
-# Traindata CSV from Github
-train_dataset_iris_github = tf.data.experimental.make_csv_dataset(
-    github_dataset,
-    batch_size,
-    column_names=column_names,
-    label_name=label_name,
-    num_epochs=1)
-
-# Testdata CSV from Tensorflow
-test_dataset = tf.data.experimental.make_csv_dataset(
-    test_fp,
-    batch_size,
-    column_names=column_names,
-    label_name='species',
-    num_epochs=1,
-    shuffle=False)
-
-# Dataset for Random CSV
-train_dataset01 = create_train_dataset(dataset_path_local, 'iris_random01.csv')
-train_dataset02 = create_train_dataset(dataset_path_local, 'iris_random02.csv')
-
-# Datasets Sorted by Species
-dataset_versicolor = create_train_dataset(dataset_path_local, 'iris_versicolor.csv')
-dataset_setosa = create_train_dataset(dataset_path_local, 'iris_setosa.csv')
-dataset_virginica = create_train_dataset(dataset_path_local, 'iris_virginica.csv')
-
-# Splitted Datasets
-split_dataset01 = create_train_dataset_with_col_name(split_data_path, '1.csv')
-split_dataset02 = create_train_dataset_with_col_name(split_data_path, '2.csv')
-split_dataset03 = create_train_dataset_with_col_name(split_data_path, '3.csv')
-
-
-# Graphs for Dataset Features
-# Tensorflow Dataset
-make_graph(train_dataset_iris_tensorflow, 'Tensorflow Iris Dataset')
-# Traindataset GITHUB CSV
-make_graph(train_dataset_iris_github, 'Train Dataset GITHUB')
-# Split Dataset 01
-make_graph(split_dataset01, "Split Dataset 01")
-make_graph(split_dataset02, "Split Dataset 02")
-make_graph(split_dataset03, "Split Dataset 03")
-# Sorted Datasets
-make_graph(dataset_setosa, "Dataset Setosa")
-make_graph(dataset_versicolor, "Dataset Versicolor")
-make_graph(dataset_virginica, "Dataset Virgincia")
-
-# Pack Datasets
-train_dataset_iris_tensorflow = train_dataset_iris_tensorflow.map(pack_features_vector)
-train_dataset_iris_github = train_dataset_iris_github.map(pack_features_vector)
-train_dataset01 = train_dataset01.map(pack_features_vector)  # Random CSV Dataset
-train_dataset02 = train_dataset02.map(pack_features_vector)  # Random CSV Dataset
-test_dataset = test_dataset.map(pack_features_vector)
+split_data03 = PreprocessData.PreprocessData(split_train_data_path, '4.csv', label_name, batch_size,
+                                                  'Split Dataset 04', True, column_names)
+split_data03.get_local_dataset()
+split_data03.create_train_dataset()
+split_data03.make_graph()
+split_data03.map_dataset()
+split_dataset04 = split_data03.dataset
 
 # Sorted Datasets
-dataset_versicolor = dataset_versicolor.map(pack_features_vector)
-dataset_virginica = dataset_virginica.map(pack_features_vector)
-dataset_setosa = dataset_setosa.map(pack_features_vector)
+data_setosa = PreprocessData.PreprocessData(dataset_path_local, 'iris_setosa.csv', label_name, batch_size,
+                                                  'Iris setosa Dataset', True, column_names)
+data_setosa.get_local_dataset()
+data_setosa.create_train_dataset()
+data_setosa.make_graph()
+data_setosa.map_dataset()
+dataset_setosa = data_setosa.dataset
 
-# Split Datasets
-split_dataset01 = split_dataset01.map(pack_features_vector)
-split_dataset02 = split_dataset02.map(pack_features_vector)
-split_dataset03 = split_dataset03.map(pack_features_vector)
+data_versicolor = PreprocessData.PreprocessData(dataset_path_local, 'iris_versicolor.csv', label_name, batch_size,
+                                                  'Iris versicolor Dataset', True, column_names)
+data_versicolor.get_local_dataset()
+data_versicolor.create_train_dataset()
+data_versicolor.make_graph()
+data_versicolor.map_dataset()
+dataset_versicolor = data_versicolor.dataset
+
+data_virginica = PreprocessData.PreprocessData(dataset_path_local, 'iris_versicolor.csv', label_name, batch_size,
+                                                  'Iris versicolor Dataset', True, column_names)
+data_virginica.get_local_dataset()
+data_virginica.create_train_dataset()
+data_virginica.make_graph()
+data_virginica.map_dataset()
+dataset_virginica = data_virginica.dataset
+
 
 # Create Lists with Dataset per Client
 sorted_datasets = [dataset_setosa, dataset_virginica, dataset_versicolor]
-train_datasets = [train_dataset_iris_tensorflow, train_dataset01]
-test_datasets = [test_dataset, test_dataset]
+#test_datasets = [split_testdataset01, split_testdataset02, split_testdataset03]
+test_datasets = [test_dataset, test_dataset, test_dataset]
 split_datasets = [split_dataset01, split_dataset02, split_dataset03]
 
-print(type(split_dataset01))
 
 # New model creation needed  TFF wont accept anything out of Scope e.g. Tensors
 def create_keras_model():
@@ -191,7 +186,7 @@ def model_fn():
       keras_model,
       # Input information on what shape the input data will have
       # Must be from type tf.Type or tf.TensorSpec
-      input_spec=dataset_setosa.element_spec,
+      input_spec=split_dataset01.element_spec,
       loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
       metrics=[tf.keras.metrics.SparseCategoricalAccuracy()])
 
@@ -213,6 +208,10 @@ with summary_writer.as_default():
       step=0,
       profiler_outdir=logfile_path)
 
+# Keep results for plotting
+train_loss_results = []
+train_accuracy_results = []
+
 # Start Federated Learning process
 for round_num in range(1, epochs):
   state, metrics = iterative_process.next(state, sorted_datasets)
@@ -222,6 +221,20 @@ for round_num in range(1, epochs):
   train_metrics = metrics['train']
   print('round ' + str(round_num) + ' loss={l:.3f}, accuracy={a:.3f}'.format(
         l=train_metrics['loss'], a=train_metrics['sparse_categorical_accuracy']))
+
+  train_loss_results.append(train_metrics['loss'])
+  train_accuracy_results.append(train_metrics['sparse_categorical_accuracy'])
+
+fig, axes = plt.subplots(2, sharex=True, figsize=(12, 8))
+fig.suptitle('Training Metrics')
+
+axes[0].set_ylabel("Loss", fontsize=14)
+axes[0].plot(train_loss_results)
+
+axes[1].set_ylabel("Accuracy", fontsize=14)
+axes[1].set_xlabel("Epoch", fontsize=14)
+axes[1].plot(train_accuracy_results)
+plt.show()
 
 # Print content of metrics['train']
 # for name, metric in metrics['train'].items():
@@ -234,6 +247,5 @@ test_accuracy = tf.keras.metrics.Accuracy()
 evaluation = tff.learning.build_federated_evaluation(model_fn)
 
 train_metrics = evaluation(state.model, test_datasets)
-
 print(str(train_metrics))
 
