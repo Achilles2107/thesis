@@ -2,8 +2,9 @@ import tensorflow as tf
 import tensorflow.keras.backend as K
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 
-# File for cutsom metrics to use with keras
+# File for custom metrics to use with keras
 
 
 # Source: https://en.wikipedia.org/wiki/Precision_and_recall
@@ -38,20 +39,13 @@ def specificity(y_true, y_pred):
     return true_negatives / (possible_negatives + K.epsilon())
 
 
-# average value of recall/sensitivity and
-# specificity
-def average_metric(y_true, y_pred):
-    spec = specificity(y_true, y_pred)
-    sens = recall(y_true, y_pred)
-    return 0.5 * (spec + sens)
-
-
-def mean_squared_error(y_true, y_pred):
-    return K.mean(K.square(y_pred - y_true), axis=-1)
-
-
-def rmse(y_true, y_pred):
-    return K.sqrt(K.mean(K.square(y_pred - y_true), axis=-1))
+# Average training accuracy
+# Must be called after training
+def mean_training_accuracy(model, metric):
+    model.history[str(metric)]
+    mean_acc = np.mean(model.history[str(metric)])
+    mean_acc = round(float(mean_acc), 2)
+    return print("Average training accuracy: " + str(mean_acc))
 
 
 def plot_metric(model, metric_name):

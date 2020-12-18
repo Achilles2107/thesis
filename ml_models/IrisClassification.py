@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow import keras
 from datetime import datetime
-from Outsourcing import PreprocessData
+from Outsourcing import DataPreprocessing
 
 
 print("TensorFlow version: {}".format(tf.__version__))
@@ -48,7 +48,7 @@ checkpoint_dir = os.path.dirname(checkpoint_path)
 # PreprocessData constructor usage
 # url, filename, label_name, batch_size, title, shuffle_value=True,  column_names=None)
 # Create Traindata
-train_data = PreprocessData.PreprocessData(train_dataset_url, 'iris_training.csv', label_name, batch_size,
+train_data = DataPreprocessing.PreprocessData(train_dataset_url, 'iris_training.csv', label_name, batch_size,
                                                   'Iris Train CSV Tensorflow', True, column_names)
 train_data.get_dataset_by_url()
 train_data.create_train_dataset()
@@ -57,7 +57,7 @@ train_data.map_dataset()
 train_dataset = train_data.dataset
 
 # Create Test Dataset
-test_data = PreprocessData.PreprocessData(test_url, 'iris_test.csv', label_name, batch_size,
+test_data = DataPreprocessing.PreprocessData(test_url, 'iris_test.csv', label_name, batch_size,
                                                   'Iris Test CSV Tensorflow', False, column_names)
 
 test_data.get_dataset_by_url()
@@ -67,7 +67,7 @@ test_data.map_dataset()
 test_dataset = test_data.dataset
 
 # Sorted Datasets
-data_setosa = PreprocessData.PreprocessData(dataset_path_local, 'iris_setosa.csv', label_name, batch_size,
+data_setosa = DataPreprocessing.PreprocessData(dataset_path_local, 'iris_setosa.csv', label_name, batch_size,
                                                   'Iris setosa Dataset', True, column_names)
 data_setosa.get_local_dataset()
 data_setosa.create_train_dataset()
@@ -75,7 +75,7 @@ data_setosa.make_graph()
 data_setosa.map_dataset()
 dataset_setosa = data_setosa.dataset
 
-data_versicolor = PreprocessData.PreprocessData(dataset_path_local, 'iris_versicolor.csv', label_name, batch_size,
+data_versicolor = DataPreprocessing.PreprocessData(dataset_path_local, 'iris_versicolor.csv', label_name, batch_size,
                                                   'Iris versicolor Dataset', True, column_names)
 data_versicolor.get_local_dataset()
 data_versicolor.create_train_dataset()
@@ -83,7 +83,7 @@ data_versicolor.make_graph()
 data_versicolor.map_dataset()
 dataset_versicolor = data_versicolor.dataset
 
-data_virginica = PreprocessData.PreprocessData(dataset_path_local, 'iris_versicolor.csv', label_name, batch_size,
+data_virginica = DataPreprocessing.PreprocessData(dataset_path_local, 'iris_versicolor.csv', label_name, batch_size,
                                                   'Iris versicolor Dataset', True, column_names)
 data_virginica.get_local_dataset()
 data_virginica.create_train_dataset()

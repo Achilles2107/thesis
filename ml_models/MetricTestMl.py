@@ -99,36 +99,6 @@ plt.show()
 test_dataset = test_dataset.map(pack_features_vector)
 train_dataset = train_dataset.map(pack_features_vector)
 
-# features, labels = next(iter(train_dataset))
-#
-# print(features[:5])
-
-
-# def precision(y_true, y_pred):
-#     true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
-#     predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
-#     return true_positives / (predicted_positives + K.epsilon())
-#
-#
-# def recall(y_true, y_pred):
-#     true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
-#     possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
-#     return true_positives / (possible_positives + K.epsilon())
-#
-#
-# def specificity(y_true, y_pred):
-#     true_negatives = K.sum(K.round(K.clip((1 - y_true) * (1 - y_pred), 0, 1)))
-#     possible_negatives = K.sum(K.round(K.clip(1 - y_true, 0, 1)))
-#     return true_negatives / (possible_negatives + K.epsilon())
-#
-#
-# def mean_squared_error(y_true, y_pred):
-#     return K.mean(K.square(y_pred - y_true), axis=-1)
-#
-#
-# def rmse(y_true, y_pred):
-# 	return K.sqrt(K.mean(K.square(y_pred - y_true), axis=-1))
-
 
 model = tf.keras.Sequential([
   tf.keras.layers.Dense(10, activation=tf.nn.relu, input_shape=(4,)),  # input shape required
@@ -138,7 +108,6 @@ model = tf.keras.Sequential([
 
 model.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=0.01),
               loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-              #metrics=[tf.keras.metrics.Precision()])
               metrics=[CustomMetrics.specificity, CustomMetrics.recall, CustomMetrics.precision, "accuracy"])
 
 
@@ -149,40 +118,10 @@ model.summary()
 
 # load model
 # model.load_weights(checkpoint_path)
-
 training_history = model.fit(train_dataset, epochs=200, validation_data=test_dataset)
 
-
-# print("shape test data")
-# print(test_dataset)
-# print("shape train data")
-# print(train_dataset)
-#
-# features, labels = next(iter(test_dataset))
-#
-# print(features[:5])
-#
-# print("dataset")
-# print(test_dataset)
-
-# # pandas test
-# df = pd.read_csv(test_url_short + 'iris_test.csv')
-# y_pred = model.predict(features)
-# y_true = tf.convert_to_tensor(df, dtype="float32", dtype_hint=None, name=None)
-#
-# print(y_pred)
-# print(y_true)
-#
-# print("y_true: \n", y_true)
-#
-# print("precision")
-# print(precision(y_true, y_pred))
-#
-# print("recall/sensitivity")
-# print(recall(y_true, y_pred))
-#
-# print("specitivity")
-# print(specificity(y_true, y_pred))
+# Print Mean Training Accuracy
+CustomMetrics.mean_training_accuracy(training_history, "accuracy")
 
 # evaluate the model
 train_acc = model.evaluate(train_dataset, verbose=0)

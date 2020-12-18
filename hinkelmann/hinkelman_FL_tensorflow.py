@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow import keras
 from datetime import datetime
-from Outsourcing import PreprocessData
+from Outsourcing import DataPreprocessing
 from sklearn.preprocessing import Normalizer
 from sklearn import preprocessing
 from sklearn.metrics import classification_report,confusion_matrix
