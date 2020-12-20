@@ -2,6 +2,7 @@ import os
 import tensorflow as tf
 from Outsourcing import CustomMetrics
 from Outsourcing import Datasets
+from Outsourcing import DataProcessing
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
 from sklearn import datasets
@@ -41,24 +42,28 @@ class_names = ['Iris setosa', 'Iris versicolor', 'Iris virginica']
 iris_datasetlist = Datasets.iris_datalist
 test_dataset = iris_datasetlist.get_dataset_at_index(1)
 
-train_features, train_labels = next(iter(iris_datasetlist.get_dataset_at_index(0)))
-print("train_features und train_labels: \n")
-print(train_features, train_labels)
+# train_features, train_labels = next(iter(iris_datasetlist.get_dataset_at_index(0)))
+# print("train_features und train_labels: \n")
+# print(train_features, train_labels)
+#
+# train_label_encoder=LabelEncoder()
+# train_label_ids=train_label_encoder.fit_transform(train_labels)
 
-train_label_encoder=LabelEncoder()
-train_label_ids=train_label_encoder.fit_transform(train_labels)
+data = DataProcessing.iter_dataset(iris_datasetlist.get_dataset_at_index(0))
+train_label_ids = DataProcessing.encode_label(data[1])
+train_features = data[0]
 
-df = pd.read_csv(dataset_path_local + "iris_training_with_cl_names.csv", index_col=False)
-print(df.head())
-
-features = df.copy()
-labels = features.pop('species')
-
-label_encoder=LabelEncoder()
-label_ids=label_encoder.fit_transform(labels)
-
-features = np.array(features)
-print(features)
+# df = pd.read_csv(dataset_path_local + "iris_training_with_cl_names.csv", index_col=False)
+# print(df.head())
+#
+# features = df.copy()
+# labels = features.pop('species')
+#
+# label_encoder=LabelEncoder()
+# label_ids=label_encoder.fit_transform(labels)
+#
+# features = np.array(features)
+# print(features)
 
 
 Y = tf.keras.utils.to_categorical(train_label_ids, num_classes=3)

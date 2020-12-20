@@ -74,8 +74,9 @@ class CreateDatasetLists:
 
 # Feature handling and label endcoding
 def iter_dataset(dataset):
-    features, label = next(iter(dataset))
-    return features, label
+    features, labels = next(iter(dataset))
+    list = [features, labels]
+    return list
 
 
 def encode_label(labels):
