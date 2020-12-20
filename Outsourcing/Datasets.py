@@ -12,10 +12,6 @@ import glob
 
 # File for Datasets for use in multiple models
 
-
-def get_dataset_list(dataset_list):
-    return dataset_list
-
 # Iris datasets
 # Filepaths
 logfile_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\logs\\'
@@ -45,15 +41,22 @@ epochs = 200
 
 iris_train = DataProcessing.CreateDatasets(train_dataset_url, 'iris_training.csv', label_name, batch_size,
                                                   'Iris Train CSV Tensorflow', True, column_names)
-iris_dataset_train = iris_train.create_iris_train_dataset()
+iris_dataset_train = iris_train.create_iris_url_dataset()
+
+iris_train02 = DataProcessing.CreateDatasets(dataset_path_local, 'iris_training02.csv', label_name, batch_size,
+                                                  'Iris Train CSV Github', True, column_names)
+iris_dataset_train02 = iris_train02.create_iris_local_dataset()
 
 # Create Test Dataset
 iris_test = DataProcessing.CreateDatasets(test_url, 'iris_test.csv', label_name, batch_size,
                                                   'Iris Test CSV Tensorflow', False, column_names)
 
-iris_dataset_test = iris_train.create_iris_test_dataset()
+iris_dataset_test = iris_train.create_iris_url_dataset()
 
-cdl = DataProcessing.CreateDatasetLists()
-cdl.add_dataset_to_list(iris_dataset_train)
-cdl.add_dataset_to_list(iris_dataset_test)
+iris_datalist = DataProcessing.CreateDatasetLists()
+iris_datalist.add_dataset_to_list(iris_dataset_train)
+iris_datalist.add_dataset_to_list(iris_dataset_test)
+iris_datalist.add_dataset_to_list(iris_dataset_train02)
+
+
 

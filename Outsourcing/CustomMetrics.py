@@ -45,7 +45,11 @@ def mean_training_accuracy(model, metric):
     model.history[str(metric)]
     mean_acc = np.mean(model.history[str(metric)])
     mean_acc = round(float(mean_acc), 2)
-    return print("Average training accuracy: " + str(mean_acc))
+    return print("Average training accuracy: " + str(100*mean_acc) + "%")
+
+
+def mean_pred(y_true, y_pred):
+    return K.mean(y_pred)
 
 
 def plot_metric(model, metric_name):

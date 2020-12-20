@@ -1,38 +1,6 @@
 import os
+from sklearn.preprocessing import LabelEncoder
 from Outsourcing import DataPreprocessing
-
-
-# File for Datasets for use in multiple models
-
-# Iris datasets
-
-# Filepaths
-logfile_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\logs\\'
-dataset_path_local = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\datasets\\iris_classification\\'
-split_train_data_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\datasets\\iris_classification\\split\\train\\'
-split_test_data_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\datasets\\iris_classification\\split\\test\\'
-saved_model_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\saved_model\\iris_model\\'
-
-# Urls and paths
-github_dataset = dataset_path_local + 'iris_training02.csv'
-train_dataset_url = "https://storage.googleapis.com/download.tensorflow.org/data/"
-test_url = "https://storage.googleapis.com/download.tensorflow.org/data/"
-
-# Parameter
-batch_size = 30
-epochs = 200
-
-# column order in CSV file
-column_names = ['sepal_length', 'sepal_width', 'petal_length', 'petal_width', 'species']
-
-feature_names = column_names[:-1]
-label_name = column_names[-1]
-
-class_names = ['Iris setosa', 'Iris versicolor', 'Iris virginica']
-
-# Creating test and train datasets
-# PreprocessData constructor usage
-# url, filename, label_name, batch_size, title, shuffle_value=True,  column_names=None)
 
 
 class CreateDatasets:
@@ -58,7 +26,7 @@ class CreateDatasets:
         return file_list
 
     # Create train dataset
-    def create_iris_train_dataset(self):
+    def create_iris_url_dataset(self):
         train_data = DataPreprocessing.PreprocessData(self.url, self.filename, self.label_name, self.batch_size,
                                                       self.title, self.shuffle_value, self.column_names)
         train_data.get_dataset_by_url()
@@ -69,10 +37,10 @@ class CreateDatasets:
         return train_dataset
 
     # Create test dataset
-    def create_iris_test_dataset(self):
+    def create_iris_local_dataset(self):
         test_data = DataPreprocessing.PreprocessData(self.url, self.filename, self.label_name, self.batch_size,
                                                      self.title, self.shuffle_value, self.column_names)
-        test_data.get_dataset_by_url()
+        test_data.get_local_dataset()
         test_data.create_train_dataset()
         test_data.make_graph()
         test_data.map_dataset()
@@ -104,3 +72,13 @@ class CreateDatasetLists:
         return self.dataset_list[index]
 
 
+# Feature handling and label endcoding
+def iter_dataset(dataset):
+    features, label = next(iter(dataset))
+    return features, label
+
+
+def encode_label(labels):
+        label_encoder = LabelEncoder()
+        label_ids = label_encoder.fit_transform(labels)
+        return label_ids
