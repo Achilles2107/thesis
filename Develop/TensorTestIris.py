@@ -99,6 +99,8 @@ for round_num in range(1, NUM_ROUNDS):
 
 print('-' * 100)
 
+IrisModel.get_local_iris_metrics()
+
 # HINT: Note the numbers look marginally better than what was reported by the last round of training above. By
 # convention, the training metrics reported by the iterative training process generally reflect the performance of
 # the model at the beginning of the training round, so the evaluation metrics will always be one step ahead.
