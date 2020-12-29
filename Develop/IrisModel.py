@@ -66,7 +66,18 @@ class IrisModel(tff.learning.Model):
             num_examples=tff.federated_sum(metrics.num_examples),
             loss=tff.federated_mean(metrics.loss, metrics.num_examples),
             accuracy=tff.federated_mean(metrics.accuracy, metrics.num_examples),
-            value=tff.federated_collect(metrics.value))
+            value=tff.federated_collect(metrics.value)),
+
+    # @tff.federated_computation
+    # def aggregate_mnist_metrics_across_clients(metrics):
+    #     return {
+    #         'num_examples': tff.federated_sum(metrics.num_examples),
+    #         'loss': tff.federated_mean(metrics.loss, metrics.num_examples),
+    #         'accuracy': tff.federated_mean(metrics.accuracy, metrics.num_examples),
+    #         'per_client/num_examples': tff.federated_collect(metrics.num_examples),
+    #         'per_client/loss': tff.federated_collect(metrics.loss),
+    #         'per_client/accuracy': tff.federated_collect(metrics.accuracy),
+    #     }
 
     def get_variables(self):
         return self._variables
@@ -107,3 +118,5 @@ class IrisModel(tff.learning.Model):
     @property
     def federated_output_computation(self):
         return IrisModel.aggregate_iris_metrics_across_clients
+
+
