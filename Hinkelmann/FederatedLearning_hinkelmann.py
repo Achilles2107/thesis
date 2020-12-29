@@ -25,7 +25,7 @@ daten = 'C:\\Users\\Stefan\\Nextcloud\\Thesisstuff\\Datensätze\\MachineLearning
 
 # daten = '/home/stefan/daten/'
 
-'''load datasets'''
+'''load Datasets'''
 
 file = daten + 'Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv'
 

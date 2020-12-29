@@ -21,15 +21,28 @@ print("TensorFlow version: {}".format(tf.__version__))
 print("Eager execution: {}".format(tf.executing_eagerly()))
 
 # Filepaths
-saved_model_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\saved_model\\iris_model\\'
-dataset_path_local = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\datasets\\iris_classification\\'
+ROOT_DIR = os.path.abspath(os.curdir)
+print("ROOT_DIR")
+print(ROOT_DIR)
+root_project_path = "C:\\Users\\Stefan\\PycharmProjects\\Thesis\\"
+
+saved_model_path = root_project_path + '\\Storage\\IrisModel\\'
+dataset_path_local = root_project_path + 'Datasets\\IrisClassification\\'
+logfile_path = root_project_path + 'Datasets\\IrisClassification\\Logs\\'
+split_train_data_path = root_project_path + '\\Datasets\\IrisClassification\\split\\train\\'
+split_test_data_path = root_project_path + '\\Datasets\\IrisClassification\\split\\test\\'
+
+# Urls and paths
+github_dataset = dataset_path_local + 'iris_training02.csv'
+train_dataset_url = "https://storage.googleapis.com/download.tensorflow.org/data/"
+test_url = "https://storage.googleapis.com/download.tensorflow.org/data/"
 
 # Path for saving weights
 checkpoint_path = saved_model_path + "cp.ckpt"
 checkpoint_dir = os.path.dirname(checkpoint_path)
 
 # Parameter
-batch_size = 60
+batch_size = 120
 epochs = 200
 
 # column order in CSV file
@@ -49,9 +62,27 @@ test_dataset = iris_datasetlist.get_dataset_at_index(1)
 # train_label_encoder=LabelEncoder()
 # train_label_ids=train_label_encoder.fit_transform(train_labels)
 
-data = DataProcessing.iter_dataset(iris_datasetlist.get_dataset_at_index(0))
-train_label_ids = DataProcessing.encode_label(data[1])
-train_features = data[0]
+iris_train = DataProcessing.CreateDatasets(train_dataset_url, 'iris_training.csv', label_name, batch_size,
+                                                  'Iris Train CSV Tensorflow', True, column_names)
+iris_dataset_train = iris_train.create_iris_url_dataset()
+
+iris_train123 = DataProcessing.CreateDatasets(split_train_data_path, '123.csv', label_name, batch_size,
+                                                  'Iris Train CSV Tensorflow', True, column_names)
+iris_dataset_train123 = iris_train123.create_iris_local_dataset()
+
+iris_train4 = DataProcessing.CreateDatasets(split_train_data_path, '4.csv', label_name, batch_size,
+                                                  'Iris Train CSV Tensorflow', True, column_names)
+iris_dataset_train4 = iris_train4.create_iris_local_dataset()
+
+features, labels = next(iter(iris_dataset_train))
+train_label_ids = DataProcessing.encode_label(labels)
+train_features = features
+
+test_features, test_labels = next(iter(iris_dataset_train))
+test_label_ids = DataProcessing.encode_label(labels)
+features_test = features
+
+print(train_label_ids)
 
 # df = pd.read_csv(dataset_path_local + "iris_training_with_cl_names.csv", index_col=False)
 # print(df.head())
@@ -67,6 +98,9 @@ train_features = data[0]
 
 
 Y = tf.keras.utils.to_categorical(train_label_ids, num_classes=3)
+Y_test = tf.keras.utils.to_categorical(test_label_ids, num_classes=3)
+
+print(train_features, Y)
 
 # Create a callback that saves the model's weights
 cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path,
@@ -103,15 +137,23 @@ model.summary()
 # load model
 #model.load_weights(checkpoint_path)
 
-training_history = model.fit(train_features, Y, epochs=200)
+training_history = model.fit(train_features, Y, epochs=100)
 
 
 CustomMetrics.mean_training_accuracy(training_history, "accuracy")
-CustomMetrics.plot_metric(training_history, "accuracy")
 CustomMetrics.plot_metric(training_history, "recall")
 CustomMetrics.plot_metric(training_history, "specificity")
 CustomMetrics.plot_metric(training_history, "mean_pred")
 CustomMetrics.plot_metric(training_history, "precision")
+CustomMetrics.subplot_metrics(training_history, "accuracy", "loss")
+
+
+from sklearn.metrics import classification_report
+import numpy as np
+
+Y_test = np.argmax(Y_test, axis=1) # Convert one-hot to index
+y_pred = np.argmax(model.predict(features_test), axis=-1)
+print(classification_report(Y_test, y_pred))
 
 # Model Evaluation
 test_accuracy = tf.keras.metrics.Accuracy()
@@ -124,6 +166,8 @@ for (x, y) in test_dataset:
   test_accuracy(prediction, y)
 
 print("Test set accuracy: {:.3%}".format(test_accuracy.result()))
+
+
 
 # print("Plotting metrics")
 # CustomMetrics.subplot_metrics(training_history, "recall", "specificity")
@@ -156,9 +200,9 @@ predict_dataset_sorted = tf.convert_to_tensor([
 
 # training=False is needed only if there are layers with different
 # behavior during training versus inference (e.g. Dropout).
-predictions = model(predict_dataset, training=False)
+predictions = model(predict_dataset_sorted, training=False)
 
-for i, logits in enumerate(predict_dataset):
+for i, logits in enumerate(predict_dataset_sorted):
   class_idx = tf.argmax(logits).numpy()
   p = tf.nn.softmax(logits)[class_idx]
   name = class_names[class_idx]

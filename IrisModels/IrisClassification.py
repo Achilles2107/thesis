@@ -9,7 +9,7 @@ print("TensorFlow version: {}".format(tf.__version__))
 print("Eager execution: {}".format(tf.executing_eagerly()))
 
 # Filepaths
-saved_model_path = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\saved_model\\iris_model\\'
+saved_model_path = '/Storage\\IrisModel\\'
 
 # Parameter
 batch_size = 30

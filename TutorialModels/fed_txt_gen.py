@@ -194,7 +194,7 @@ clients = [
 
 train_datasets = [data(client) for client in clients]
 
-# We concatenate the test datasets for evaluation with Keras by creating a
+# We concatenate the test Datasets for evaluation with Keras by creating a
 # Dataset of Datasets, and then identity flat mapping across all the examples.
 test_dataset = tf.data.Dataset.from_tensor_slices(
     [data(client, test_data) for client in clients]).flat_map(lambda x: x)

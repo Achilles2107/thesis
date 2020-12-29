@@ -87,6 +87,6 @@ def make_federated_data(client_data, client_ids):
 
 federated_train_data = make_federated_data(train_dataset, train_dataset.client_ids)
 
-print('Number of client datasets: {l}'.format(l=len(federated_train_data)))
+print('Number of client Datasets: {l}'.format(l=len(federated_train_data)))
 print('First dataset: {d}'.format(d=federated_train_data[0]))
 

@@ -28,7 +28,7 @@ test_path = tf.keras.utils.get_file(
 
 train = pd.read_csv(train_path, names=CSV_COLUMN_NAMES, header=0)
 test = pd.read_csv(test_path, names=CSV_COLUMN_NAMES, header=0)
-# Here we use keras (a module inside of TensorFlow) to grab our datasets and read them into a pandas dataframe
+# Here we use keras (a module inside of TensorFlow) to grab our Datasets and read them into a pandas dataframe
 
 print(type(train))
 print(train.dtypes)
@@ -70,9 +70,9 @@ initial_model.summary()
 
 training_history = initial_model.fit(train_dataset, epochs=200, validation_data=(test, test_y),)
 
-# initial_model.save('saved_model/iris_classification')
+# initial_model.save('Storage/IrisClassification')
 
-# tf.keras.models.save_model(initial_model, 'saved_model/iris_model', include_optimizer=False)
+# tf.keras.models.save_model(initial_model, 'Storage/IrisModel', include_optimizer=False)
 
 results = initial_model.evaluate(test, test_y, verbose=1)
 print("test loss, test acc:", results)
@@ -98,7 +98,7 @@ plt.legend(['train', 'test'], loc='upper left')
 plt.show()
 
 
-# federated_learning_iris
+# IrisFederatedLearning
 federated = False
 
 if federated == True:

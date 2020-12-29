@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.utils import shuffle
 
 
-dataset_path_local = 'C:\\Users\\Stefan\\PycharmProjects\\thesis\\datasets\\iris_classification\\'
+dataset_path_local = '/Datasets/IrisClassification\\'
 split_data_path = dataset_path_local + 'split\\'
 
 
