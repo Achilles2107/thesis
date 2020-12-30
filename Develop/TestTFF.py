@@ -24,3 +24,10 @@ print(str(federated_float_on_clients))
 
 print(federated_float_on_clients.all_equal)
 
+batch = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+flat_labels = tf.reshape(batch, [-1])
+
+print(flat_labels)
+
+
