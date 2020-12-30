@@ -4,9 +4,9 @@ import tensorflow as tf
 import tensorflow_federated as tff
 
 
-@attr.s(frozen=True, slots=True, eq=False)
-class IrisBatchOutput(tff.learning.BatchOutput):
-    per_client_accuracy = attr.ib()
+#@attr.s(frozen=True, slots=True, eq=False)
+#class IrisBatchOutput(tff.learning.BatchOutput):
+#    per_client_accuracy = attr.ib()
 
 
 def create_iris_variables():
@@ -106,9 +106,9 @@ class IrisModel(tff.learning.Model):
           del training
           loss, predictions = iris_forward_pass(self._variables, batch)
           num_examples = tf.shape(batch['x'])[0]
-          return IrisBatchOutput(
-            loss=loss, predictions=predictions, num_examples=num_examples,
-            per_client_accuracy=self._variables.per_client_accuracy)
+          return tff.learning.BatchOutput(
+              loss=loss, predictions=predictions, num_examples=num_examples)
+
 
       @tf.function
       def report_local_outputs(self):

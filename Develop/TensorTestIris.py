@@ -3,6 +3,8 @@ import nest_asyncio
 from Develop.IrisClientData import IrisClientData
 # from Develop.IrisModel import IrisModel
 from Develop.IrisModel02 import IrisModel
+from Outsourcing.Datasets import IrisDatasets
+from Outsourcing import CustomMetrics
 
 nest_asyncio.apply()
 
@@ -92,15 +94,29 @@ print(str(iterative_process.initialize.type_signature))
 
 state = iterative_process.initialize()
 
+test_dataset = IrisDatasets.test_dataset
+
+
+def evaluate(server_state):
+  keras_model = create_keras_model()
+  keras_model.compile(
+      loss=tf.keras.losses.SparseCategoricalCrossentropy(),
+      metrics=[tf.keras.metrics.SparseCategoricalAccuracy(),
+               CustomMetrics.recall, CustomMetrics.specificity]
+  )
+  keras_model.set_weights(server_state)
+  keras_model.evaluate(test_dataset)
+
+
 NUM_ROUNDS = 11
 for round_num in range(1, NUM_ROUNDS):
     state, metrics = iterative_process.next(state, federated_train_data)
     #print(list(metrics['train']['value']))
     print('round {:2d}, metrics={}'.format(round_num, metrics))
+    evaluate(state)
 
 
 print('-' * 100)
-
 
 # HINT: Note the numbers look marginally better than what was reported by the last round of training above. By
 # convention, the training metrics reported by the iterative training process generally reflect the performance of
