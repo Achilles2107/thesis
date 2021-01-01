@@ -22,7 +22,7 @@ class IrisClientData(client_data.ClientData):
         df_test = pd.read_csv(
             self._filepath,
             names=["sepal_length", "sepal_width", "petal_length", "petal_width", str(self.label_name)],
-            nrows=100)
+            nrows=100, skiprows=self.skiprows)
 
         float_cols = [c for c in df_test if df_test[c].dtype == "float64"]
         float32_cols = {c: np.float32 for c in float_cols}
@@ -35,7 +35,7 @@ class IrisClientData(client_data.ClientData):
         df = pd.read_csv(
             self._filepath,
             names=["sepal_length", "sepal_width", "petal_length", "petal_width", str(self.label_name)],
-            engine='c', dtype=all_cols)
+            engine='c', dtype=all_cols, skiprows=self.skiprows)
 
         # Set _element_type_structure
 
