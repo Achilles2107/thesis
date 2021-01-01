@@ -12,6 +12,8 @@ import collections
 import numpy as np
 import tensorflow as tf
 import tensorflow_federated as tff
+import pathlib as path
+import pandas as pd
 
 np.random.seed(0)
 
@@ -92,9 +94,7 @@ iterative_process = tff.learning.build_federated_averaging_process(
 
 print(str(iterative_process.initialize.type_signature))
 
-state = iterative_process.initialize()
-
-test_dataset = IrisDatasets.test_dataset
+server_state = iterative_process.initialize()
 
 
 def evaluate(server_state):
@@ -105,15 +105,16 @@ def evaluate(server_state):
                CustomMetrics.recall, CustomMetrics.specificity]
   )
   keras_model.set_weights(server_state)
-  keras_model.evaluate(test_dataset)
+  keras_model.evaluate(federated_train_data)
 
 
 NUM_ROUNDS = 11
 for round_num in range(1, NUM_ROUNDS):
-    state, metrics = iterative_process.next(state, federated_train_data)
+    server_state, metrics = iterative_process.next(server_state, federated_train_data)
     #print(list(metrics['train']['value']))
     print('round {:2d}, metrics={}'.format(round_num, metrics))
-    evaluate(state)
+    print(server_state)
+    # evaluate(server_state)
 
 
 print('-' * 100)
@@ -123,11 +124,11 @@ print('-' * 100)
 # the model at the beginning of the training round, so the evaluation metrics will always be one step ahead.
 
 evaluation = tff.learning.build_federated_evaluation(IrisModel)
-train_metrics = evaluation(state.model, federated_train_data)
+train_metrics = evaluation(server_state.model, federated_train_data)
 print(train_metrics)
 
 # Here the unused client:ids are used
 sample_clients = dataset.client_ids[NUM_CLIENTS:]
 federated_test_data = make_federated_data(dataset, sample_clients)
-test_metrics = evaluation(state.model, federated_test_data)
+test_metrics = evaluation(server_state.model, federated_test_data)
 print(test_metrics)

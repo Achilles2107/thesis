@@ -1,8 +1,8 @@
-import os
 from Outsourcing import DataPreprocessing
-from Outsourcing import CustomMetrics
-from Outsourcing import DataProcessing
+import pathlib
 
+root_project_path = pathlib.Path.cwd().parent
+print(root_project_path)
 
 # File for Datasets for use in multiple models
 
@@ -11,16 +11,15 @@ class IrisDatasets:
 
     # Iris Datasets
     # Filepaths
-    root_project_path = "C:\\Users\\Stefan\\PycharmProjects\\Thesis\\"
 
-    saved_model_path = root_project_path + '\\Storage\\IrisModel\\'
-    dataset_path_local = root_project_path + 'Datasets\\IrisClassification\\'
-    logfile_path = root_project_path + 'Datasets\\IrisClassification\\Logs\\'
-    split_train_data_path = root_project_path + '\\Datasets\\IrisClassification\\split\\train\\'
-    split_test_data_path = root_project_path + '\\Datasets\\IrisClassification\\split\\test\\'
+    saved_model_path = root_project_path / '/Storage/IrisModel/'
+    dataset_path_local = root_project_path / '/Datasets/IrisClassification/'
+    logfile_path = root_project_path / 'Datasets/IrisClassification/Logs/'
+    split_train_data_path = root_project_path / '/Datasets/IrisClassification/split/train/'
+    split_test_data_path = root_project_path / '/Datasets/IrisClassification/split/test/'
 
     # Urls and paths
-    github_dataset = dataset_path_local + 'iris_training02.csv'
+    github_dataset = dataset_path_local / 'iris_training02.csv'
     train_dataset_url = "https://storage.googleapis.com/download.tensorflow.org/data/"
     test_url = "https://storage.googleapis.com/download.tensorflow.org/data/"
 

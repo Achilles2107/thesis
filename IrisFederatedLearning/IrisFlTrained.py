@@ -1,233 +1,132 @@
-import os
-import matplotlib.pyplot as plt
+import nest_asyncio
+from Develop.IrisClientData import IrisClientData
+from Develop.IrisModel02 import IrisModel
+import collections
 import tensorflow as tf
-from tensorflow import keras
 import tensorflow_federated as tff
-from datetime import datetime
-from Outsourcing import DataPreprocessing
+import pathlib as path
+from pathlib import Path
+
+nest_asyncio.apply()
 
 print("TensorFlow version: {}".format(tf.__version__))
 print("Eager execution: {}".format(tf.executing_eagerly()))
 
-# Tensorboard Command for CMD or Powershell
-# tensorboard --logdir C:\\Users\\Stefan\\PycharmProjects\\Thesis\\Logs\\
-
-# Filepaths
-logfile_path = '/Logs\\'
-dataset_path_local = '/Datasets/IrisClassification\\'
-split_train_data_path = '/Datasets/IrisClassification\\split\\train\\'
-split_test_data_path = '/Datasets/IrisClassification\\split\\test\\'
-saved_model_path = '/Storage\\IrisModel\\'
-# Path to CSV from GITHUB
-github_dataset = dataset_path_local + 'iris_training02.csv'
-train_dataset_url = "https://storage.googleapis.com/download.tensorflow.org/data/"
-test_url = "https://storage.googleapis.com/download.tensorflow.org/data/"
-
-# Tensorboard
-now = datetime.now()
-# Define the Keras TensorBoard callback.
-logdir = logfile_path + "\\graph\\" + datetime.now().strftime("%Y%m%d-%H%M%S")
-tensorboard_callback = keras.callbacks.TensorBoard(log_dir=logdir)
-
 # Parameter
-batch_size = 30
+# Training iterations
 epochs = 200
+# Number of classes
+num_classes = 3
 
-# column order in CSV file
-column_names = ['sepal_length', 'sepal_width', 'petal_length', 'petal_width', 'species']
-feature_names = column_names[:-1]
-label_name = column_names[-1]
-class_names = ['Iris setosa', 'Iris versicolor', 'Iris virginica']
+# Root Path
+root_project_path = path.Path.cwd().parent
+print(root_project_path)
+path = Path(root_project_path / 'Storage/IrisModel')
+filepath = Path(root_project_path / 'Datasets/IrisClassification/iris_training.csv')
 
-# Path for saving weights
-checkpoint_path = saved_model_path + "cp.ckpt"
-checkpoint_dir = os.path.dirname(checkpoint_path)
+# Reads the data from the iris file
+dataset = IrisClientData(filepath, 1)
 
-# Create train and test data
-# PreprocessData constructor usage
-# url, filename, label_name, batch_size, title, shuffle_value=True,  column_names=None)
-# Create Traindata
-train_data = DataPreprocessing.PreprocessData(train_dataset_url, 'iris_training.csv', label_name, batch_size,
-                                                  'Iris Train CSV Tensorflow', True, column_names)
-train_data.get_dataset_by_url()
-train_data.create_train_dataset()
-train_data.make_graph()
-train_data.map_dataset()
-train_dataset = train_data.dataset
+print("Number of clients which produced data: " + str(len(dataset.client_ids)))
 
-# Create Test Dataset
-test_data = DataPreprocessing.PreprocessData(test_url, 'iris_test.csv', label_name, batch_size,
-                                                  'Iris Test CSV Tensorflow', False, column_names)
+# Creates a single dataset for a given client_id
+selected_client_id = dataset.client_ids[0]
+example_dataset = dataset.create_tf_dataset_for_client(selected_client_id)
 
-test_data.get_dataset_by_url()
-test_data.create_train_dataset()
-test_data.make_graph()
-test_data.map_dataset()
-test_dataset = test_data.dataset
+print("Dataset size for single client: " + str(len(example_dataset)))
+[print(element) for element in example_dataset]
+print('-' * 100)
 
-# Create split test data
-split_test_data01 = DataPreprocessing.PreprocessData(split_test_data_path, '1.csv', label_name, batch_size,
-                                                  'Split Test Dataset 01', True, column_names)
-split_test_data01.get_local_dataset()
-split_test_data01.create_train_dataset()
-split_test_data01.make_graph()
-split_test_data01.map_dataset()
-split_testdataset01 = split_test_data01.dataset
+# HERE STARTS THE FEDERATED LEARNING
 
-split_test_data02 = DataPreprocessing.PreprocessData(split_test_data_path, '2.csv', label_name, batch_size,
-                                                  'Split Test Dataset 02', True, column_names)
-split_test_data02.get_local_dataset()
-split_test_data02.create_train_dataset()
-split_test_data02.make_graph()
-split_test_data02.map_dataset()
-split_testdataset02 = split_test_data02.dataset
-
-split_test_data03 = DataPreprocessing.PreprocessData(split_test_data_path, '3.csv', label_name, batch_size,
-                                                  'Split Test Dataset 03', True, column_names)
-split_test_data03.get_local_dataset()
-split_test_data03.create_train_dataset()
-split_test_data03.make_graph()
-split_test_data03.map_dataset()
-split_testdataset03 = split_test_data01.dataset
-
-# Create Split Dataset
-split_data01 = DataPreprocessing.PreprocessData(split_train_data_path, '1.csv', label_name, batch_size,
-                                                  'Split Dataset 01', True, column_names)
-split_data01.get_local_dataset()
-split_data01.create_train_dataset()
-split_data01.make_graph()
-split_data01.map_dataset()
-split_dataset01 = split_data01.dataset
-
-split_data02 = DataPreprocessing.PreprocessData(split_train_data_path, '2.csv', label_name, batch_size,
-                                                  'Split Dataset 02', True, column_names)
-split_data02.get_local_dataset()
-split_data02.create_train_dataset()
-split_data02.make_graph()
-split_data02.map_dataset()
-split_dataset02 = split_data02.dataset
-
-split_data03 = DataPreprocessing.PreprocessData(split_train_data_path, '3.csv', label_name, batch_size,
-                                                  'Split Dataset 03', True, column_names)
-split_data03.get_local_dataset()
-split_data03.create_train_dataset()
-split_data03.make_graph()
-split_data03.map_dataset()
-split_dataset03 = split_data03.dataset
+NUM_CLIENTS = 8
+NUM_EPOCHS = 5
+BATCH_SIZE = 20
+SHUFFLE_BUFFER = 100
+PREFETCH_BUFFER = 10
 
 
-# Sorted Datasets
-data_setosa = DataPreprocessing.PreprocessData(dataset_path_local, 'iris_setosa.csv', label_name, batch_size,
-                                                  'Iris setosa Dataset', True, column_names)
-data_setosa.get_local_dataset()
-data_setosa.create_train_dataset()
-data_setosa.make_graph()
-data_setosa.map_dataset()
-dataset_setosa = data_setosa.dataset
+def preprocess(dataset_to_preprocess):
+    # Here is not much done, because the iris data is already in a perfect shape
+    def batch_format_fn(element, label):
+        return collections.OrderedDict(
+            x=element,
+            y=label)
 
-data_versicolor = DataPreprocessing.PreprocessData(dataset_path_local, 'iris_versicolor.csv', label_name, batch_size,
-                                                  'Iris versicolor Dataset', True, column_names)
-data_versicolor.get_local_dataset()
-data_versicolor.create_train_dataset()
-data_versicolor.make_graph()
-data_versicolor.map_dataset()
-dataset_versicolor = data_versicolor.dataset
-
-data_virginica = DataPreprocessing.PreprocessData(dataset_path_local, 'iris_versicolor.csv', label_name, batch_size,
-                                                  'Iris versicolor Dataset', True, column_names)
-data_virginica.get_local_dataset()
-data_virginica.create_train_dataset()
-data_virginica.make_graph()
-data_virginica.map_dataset()
-dataset_virginica = data_virginica.dataset
-
-# Make lists with dataset per client
-split_datasets = [split_dataset01, split_dataset02, split_dataset03]
-test_datasets = [test_dataset, test_dataset, test_dataset]
-sorted_datasets = [dataset_setosa, dataset_virginica, dataset_versicolor]
-
-metrics_list = []
+    return dataset_to_preprocess.repeat(NUM_EPOCHS).shuffle(SHUFFLE_BUFFER).batch(
+        BATCH_SIZE).map(batch_format_fn).prefetch(PREFETCH_BUFFER)
 
 
-# We _must_ create a new model here, and _not_ capture it from an external
-# scope. TFF will call this within different graph contexts.
+# This preprocessed dataset is used for the element_spec of the model_fn
+preprocessed_dataset = preprocess(example_dataset)
+
+
+def make_federated_data(client_data, client_ids):
+    return [
+        preprocess(client_data.create_tf_dataset_for_client(x))
+        for x in client_ids
+    ]
+
+
+# Select the clients which are used for the test dataset
+sample_clients = dataset.client_ids[0:NUM_CLIENTS]
+federated_train_data = make_federated_data(dataset, sample_clients)
+
+print('Number of client Datasets: {l}'.format(l=len(federated_train_data)))
+print('First dataset: {d}'.format(d=federated_train_data[0]))
+
+
 def create_keras_model():
-  return tf.keras.models.Sequential([
-      tf.keras.layers.Dense(10, activation=tf.nn.relu, input_shape=(4,)),  # input shape required
-      tf.keras.layers.Dense(10, activation=tf.nn.relu),
-      tf.keras.layers.Dense(3)
-  ])
+    return tf.keras.models.Sequential([
+        tf.keras.layers.Input(shape=(4,)),
+        tf.keras.layers.Dense(10, kernel_initializer='zeros'),
+        tf.keras.layers.Softmax(),
+    ])
 
 
 def model_fn():
-  # We _must_ create a new model here, and _not_ capture it from an external
-  # scope. TFF will call this within different graph contexts.
-  # loading saved model from IrisModelSaveWeights.py
-  keras_model = tf.keras.models.load_model(saved_model_path + "keras_model\\", compile=False)
-  return tff.learning.from_keras_model(
-      keras_model,
-      # Input information on what shape the input data will have
-      # Must be from type tf.Type or tf.TensorSpec
-      input_spec=split_dataset01.element_spec,
-      loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-      metrics=[tf.keras.metrics.SparseCategoricalAccuracy()])
+    # We _must_ create a new model here, and _not_ capture it from an external
+    # scope. TFF will call this within different graph contexts.
+    keras_model = tf.keras.models.load_model(path + "keras_model\\", compile=False)
+    return tff.learning.from_keras_model(
+        keras_model,
+        input_spec=preprocessed_dataset.element_spec,
+        loss=tf.keras.losses.SparseCategoricalCrossentropy(),
+        metrics=[tf.keras.metrics.SparseCategoricalAccuracy()])
 
 
 iterative_process = tff.learning.build_federated_averaging_process(
-    model_fn,
+    IrisModel,
+    client_optimizer_fn=lambda: tf.keras.optimizers.SGD(learning_rate=0.05))
+
+print(str(iterative_process.initialize.type_signature))
+
+server_state = iterative_process.initialize()
+
+keras_model = create_keras_model()
+
+fed_avg = tff.learning.build_federated_averaging_process(
+    model_fn=model_fn,
     client_optimizer_fn=lambda: tf.keras.optimizers.SGD(learning_rate=0.01),  # for each Client
     server_optimizer_fn=lambda: tf.keras.optimizers.SGD(learning_rate=1.0))  # for Global model
 
-# Tensorboard Writer
-summary_writer = tf.summary.create_file_writer(logfile_path)
-
-tf.summary.trace_on(graph=True, profiler=True)
-# Construct Server State
-state = iterative_process.initialize()
-with summary_writer.as_default():
-  tf.summary.trace_export(
-      name="Federated iterative process init",
-      step=0,
-      profiler_outdir=logfile_path)
-
-# Keep results for plotting
-train_loss_results = []
-train_accuracy_results = []
 
 # Start Federated Learning process
 for round_num in range(1, epochs):
-  state, metrics = iterative_process.next(state, split_datasets)
-  with summary_writer.as_default():w
-      for name, metric in metrics['train'].items():
-          tf.summary.scalar(name, metric, step=round_num)
-  train_metrics = metrics['train']
-  print('round ' + str(round_num) + ' loss={l:.3f}, accuracy={a:.3f}'.format(
-        l=train_metrics['loss'], a=train_metrics['sparse_categorical_accuracy']))
+    server_state, metrics = fed_avg.next(server_state, federated_train_data)
+    print('round {:2d}, metrics={}'.format(round_num, metrics))
 
-  train_loss_results.append(train_metrics['loss'])
-  train_accuracy_results.append(train_metrics['sparse_categorical_accuracy'])
-
-fig, axes = plt.subplots(2, sharex=True, figsize=(12, 8))
-fig.suptitle('Training Metrics')
-
-axes[0].set_ylabel("Loss", fontsize=14)
-axes[0].plot(train_loss_results)
-
-axes[1].set_ylabel("Accuracy", fontsize=14)
-axes[1].set_xlabel("Epoch", fontsize=14)
-axes[1].plot(train_accuracy_results)
-plt.show()
-
-# Print content of metrics['train']
-# for name, metric in metrics['train'].items():
-#     print(name, metric)
+# Save new model weights
+server_state.model.save(path / "/keras_model/", overwrite=True, include_optimizer=True)
 
 # Evaluation
-# Model Evaluation
-test_accuracy = tf.keras.metrics.Accuracy()
+evaluation = tff.learning.build_federated_evaluation(IrisModel)
+train_metrics = evaluation(server_state.model, federated_train_data)
+print(train_metrics)
 
-evaluation = tff.learning.build_federated_evaluation(model_fn)
+# Here the unused client:ids are used
+sample_clients = dataset.client_ids[NUM_CLIENTS:]
+federated_test_data = make_federated_data(dataset, sample_clients)
+test_metrics = evaluation(server_state.model, federated_test_data)
+print(test_metrics)
 
-train_metrics = evaluation(state.model, test_datasets)
-
-print(str(train_metrics))

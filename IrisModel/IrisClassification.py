@@ -1,58 +1,64 @@
 import os
 import matplotlib.pyplot as plt
 import tensorflow as tf
-from tensorflow import keras
-from datetime import datetime
-from Outsourcing import Datasets
+from Outsourcing import CustomMetrics
+from Outsourcing.Datasets import IrisDatasets
+from Outsourcing.DataProcessing import *
+from Outsourcing.CustomMetrics import *
+import pathlib as path
+from pathlib import Path
 
 print("TensorFlow version: {}".format(tf.__version__))
 print("Eager execution: {}".format(tf.executing_eagerly()))
 
 # Filepaths
-saved_model_path = '/Storage\\IrisModel\\'
-
-# Parameter
-batch_size = 30
-epochs = 200
-
-# column order in CSV file
-# Labels
-# Iris setosa = 0
-# Iris versicolor = 1
-# Iris virginica = 2
-column_names = ['sepal_length', 'sepal_width', 'petal_length', 'petal_width', 'species']
-feature_names = column_names[:-1]
-label_name = column_names[-1]
-class_names = ['Iris setosa', 'Iris versicolor', 'Iris virginica']
+cwd = path.Path.cwd().parent
+path = Path(cwd / 'Storage/IrisModel')
 
 # Path for saving weights
-checkpoint_path = saved_model_path + "cp.ckpt"
+checkpoint_path = path / "cp.ckpt"
 checkpoint_dir = os.path.dirname(checkpoint_path)
 
+# Parameter
+# Training iterations
+epochs = 200
+# Number of classes
+num_classes = 3
+
+class_names = ['Iris setosa', 'Iris versicolor', 'Iris virginica']
+
 # Datasets
-iris_datasetlist = Datasets.iris_datalist
+# Get datasets from IrisDataset class
+train_dataset = IrisDatasets.train_dataset
+print(train_dataset)
 
-train_dataset = iris_datasetlist.get_dataset_at_index(0)
-test_dataset = iris_datasetlist.get_dataset_at_index(1)
+test_dataset = IrisDatasets.test_dataset
+print(test_dataset)
 
-features, labels = next(iter(train_dataset))
+# Print datasets
+print("Train Dataset: \n")
+print(get_features_labels(train_dataset))
+print("Test Dataset: \n")
+print(get_features_labels(train_dataset))
 
-print(features[:5])
+# Decode and put labels in a binary matrix and get features
+# Binary matrix is need as we are classifying to more than two classes
+train_features, train_labels = decode_label(train_dataset, num_classes)
+test_features, test_labels = decode_label(test_dataset, num_classes)
 
 model = tf.keras.Sequential([
-  tf.keras.layers.Dense(10, activation=tf.nn.relu, input_shape=(4,)),  # input shape required
-  tf.keras.layers.Dense(10, activation=tf.nn.relu),
-  tf.keras.layers.Dense(3)
+  tf.keras.layers.Dense(10, activation=tf.nn.relu, input_shape=(4,)),
+  tf.keras.layers.Dense(3, activation=tf.nn.softmax)
 ])
 
 # Make Predictions
-predictions = model(features)
+predictions = model(train_features, train_labels)
 predictions[:5]
 
 tf.nn.softmax(predictions[:5])
 
 print("Prediction: {}".format(tf.argmax(predictions, axis=1)))
-print("    Labels: {}".format(labels))
+print("    Labels: {}".format(train_labels))
 
 # Define the loss and gradient function
 loss_object = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
@@ -66,7 +72,7 @@ def loss(model, x, y, training):
   return loss_object(y_true=y, y_pred=y_)
 
 
-l = loss(model, features, labels, training=False)
+l = loss(model, train_features, train_labels, training=False)
 print("Loss test: {}".format(l))
 
 
@@ -79,7 +85,7 @@ def grad(model, inputs, targets):
 optimizer = tf.keras.optimizers.SGD(learning_rate=0.01)
 
 
-loss_value, grads = grad(model, features, labels)
+loss_value, grads = grad(model, train_features, train_labels)
 
 print("Step: {}, Initial Loss: {}".format(optimizer.iterations.numpy(),
                                           loss_value.numpy()))
@@ -87,7 +93,7 @@ print("Step: {}, Initial Loss: {}".format(optimizer.iterations.numpy(),
 optimizer.apply_gradients(zip(grads, model.trainable_variables))
 
 print("Step: {},         Loss: {}".format(optimizer.iterations.numpy(),
-                                          loss(model, features, labels, training=True).numpy()))
+                                          loss(model, train_features, train_labels, training=True).numpy()))
 
 # Training Loop
 # Note: Rerunning this cell uses the same model variables
