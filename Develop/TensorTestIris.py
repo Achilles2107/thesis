@@ -113,7 +113,6 @@ for round_num in range(1, NUM_ROUNDS):
     server_state, metrics = iterative_process.next(server_state, federated_train_data)
     #print(list(metrics['train']['value']))
     print('round {:2d}, metrics={}'.format(round_num, metrics))
-    print(server_state)
     # evaluate(server_state)
 
 

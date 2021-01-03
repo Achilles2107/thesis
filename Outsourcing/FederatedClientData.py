@@ -8,9 +8,11 @@ np.random.seed(0)
 
 class IrisClientData(client_data.ClientData):
 
-    def __init__(self, filepath):
+    def __init__(self, filepath, skiprows=0, labelname='label'):
         self._filepath = filepath
         self._client_ids = list(range(10))
+        self.skiprows = skiprows
+        self.label_name = labelname
 
         self._pd_dataset = self._create_dataset()
         self._elements_per_client = len(self._pd_dataset) // len(self._client_ids)
@@ -19,8 +21,8 @@ class IrisClientData(client_data.ClientData):
         # client_id is unused at the moment
         df_test = pd.read_csv(
             self._filepath,
-            names=["sepal_length", "sepal_width", "petal_length", "petal_width", "label"],
-            nrows=100)
+            names=["sepal_length", "sepal_width", "petal_length", "petal_width", str(self.label_name)],
+            nrows=100, skiprows=self.skiprows)
 
         float_cols = [c for c in df_test if df_test[c].dtype == "float64"]
         float32_cols = {c: np.float32 for c in float_cols}
@@ -32,8 +34,8 @@ class IrisClientData(client_data.ClientData):
 
         df = pd.read_csv(
             self._filepath,
-            names=["sepal_length", "sepal_width", "petal_length", "petal_width", "label"],
-            engine='c', dtype=all_cols)
+            names=["sepal_length", "sepal_width", "petal_length", "petal_width", str(self.label_name)],
+            engine='c', dtype=all_cols, skiprows=self.skiprows)
 
         # Set _element_type_structure
 
@@ -55,7 +57,7 @@ class IrisClientData(client_data.ClientData):
         elements = range(int(client_id) * self._elements_per_client,
                          int(client_id) * self._elements_per_client + self._elements_per_client)
         df = self._pd_dataset.take(elements)
-        label = df.pop('label')
+        label = df.pop(str(self.label_name))
         return tf.data.Dataset.from_tensor_slices((df.values, label.values))
 
     @property

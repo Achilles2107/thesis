@@ -109,10 +109,9 @@ class IrisModel(tff.learning.Model):
           return tff.learning.BatchOutput(
               loss=loss, predictions=predictions, num_examples=num_examples)
 
-
       @tf.function
       def report_local_outputs(self):
-          print("LOCAL OUTPUTS: " + str(self._variables))
+          #print("LOCAL OUTPUTS: " + str(self._variables))
           return get_local_iris_metrics(self._variables)
 
       @property
