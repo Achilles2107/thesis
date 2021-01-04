@@ -48,6 +48,14 @@ def mean_training_accuracy(model, metric):
     return print("Average training accuracy: " + str(100*mean_acc) + "%")
 
 
+def print_y_true(y_true, y_pred):
+       return y_true
+
+
+def print_y_pred(y_true, y_pred):
+        return y_pred
+
+
 def mean_pred(y_true, y_pred):
     return K.mean(y_pred)
 
