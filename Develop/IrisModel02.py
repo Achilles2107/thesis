@@ -47,12 +47,11 @@ def iris_forward_pass(variables, batch):
     accuracy = tf.reduce_mean(tf.cast(tf.equal(predictions, flat_labels), tf.float32))
 
     num_examples = tf.cast(tf.size(batch['y']), tf.float32)
-
     variables.num_examples.assign_add(num_examples)
     variables.loss_sum.assign_add(loss * num_examples)
     variables.accuracy_sum.assign_add(accuracy * num_examples)
-    variables.client_accuracy.assign(accuracy)
-    variables.client_loss.assign_add(12.13)
+    variables.client_accuracy.assign_add(accuracy)
+    variables.client_loss.assign(loss)
     variables.client_num_examples.assign(num_examples)
 
     client_loss = variables.client_loss

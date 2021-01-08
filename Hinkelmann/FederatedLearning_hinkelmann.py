@@ -155,14 +155,14 @@ df = df.reset_index()
 dropped = df.dropna(inplace=True, axis=0)
 print(dropped)
 # check if NaN Values exist
-result= df.isnull().sum().sum()
+result = df.isnull().sum().sum()
 print('NAN Werte: ', result)
 
 # NORMALIZATION of X Values
 print(df[0:5])
 # separate array into input and output components
-X = df.values[:,0:66]
-Y = df.values[:,66]
+# X = df.values[:,0:66]
+# Y = df.values[:,66]
 
 X = df.values[:, 0:78]
 Y = df.values[:, 78]
@@ -171,6 +171,8 @@ scaler = Normalizer().fit(X)
 normalizedX = scaler.transform(X)
 # summarize transformed data
 np.set_printoptions(precision=3)
+
+print("normalized X values: \n", X)
 
 # TRANSFORM LABEL TO INTEGER
 # 1. INSTANTIATE
