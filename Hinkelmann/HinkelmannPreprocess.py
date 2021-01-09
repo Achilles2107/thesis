@@ -50,20 +50,19 @@ daten = pathlib.Path('C:/Users/Stefan/Nextcloud/Thesisstuff/Datensätze/MachineL
 file = daten / 'Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv'
 
 # Can be used to get column names
-# with open(file, 'r') as f:
-#     d_reader = csv.DictReader(f)
-#
-#     #get fieldnames from DictReader object and store in list
-#     headers = d_reader.fieldnames
-#     print(headers)
+with open(file, 'r') as f:
+    d_reader = csv.DictReader(f)
 
-df = pd.read_csv(file, header=None, skiprows=1, nrows=500)
+    #get fieldnames from DictReader object and store in list
+    headers = d_reader.fieldnames
+    print(str(headers))
+
+df = pd.read_csv(file, header=None, skiprows=1, nrows=500)  # type: pd.DataFrame
 
 # Replace negative Infinity Values
 df = df.replace([np.inf, -np.inf], 0).fillna(0)
 
 print("Read {} rows.".format(len(df)))
-
 
 df.columns = ["DestinationPort",
               "FlowDuration",
@@ -144,6 +143,9 @@ df.columns = ["DestinationPort",
               "IdleMax",
               "IdleMin",
               "Label"]
+
+column_names = df.columns
+label_name = column_names[-1]
 
 # display 5 rows
 print(df.head())
