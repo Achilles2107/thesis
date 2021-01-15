@@ -1,5 +1,19 @@
 import tensorflow as tf
 import tensorflow_federated as tff
+import pathlib as path
+from pathlib import Path
+import os
+
+print("TensorFlow version: {}".format(tf.__version__))
+print("Eager execution: {}".format(tf.executing_eagerly()))
+
+# Filepaths
+cwd = path.Path.cwd().parent
+path = Path(cwd / 'storage/iris_model/fed/')
+
+# Path for saving weights
+checkpoint_path = path / "cp.ckpt"
+checkpoint_dir = os.path.dirname(checkpoint_path)
 
 # Load simulation data.
 source, _ = tff.simulation.datasets.emnist.load_data()
@@ -44,4 +58,3 @@ state = trainer.initialize()
 for _ in range(5):
   state, metrics = trainer.next(state, train_data)
   print (metrics)
-

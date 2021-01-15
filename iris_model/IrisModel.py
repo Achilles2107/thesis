@@ -112,10 +112,17 @@ predict_dataset_sorted = tf.convert_to_tensor([
 # training=False is needed only if there are layers with different
 # behavior during training versus inference (e.g. Dropout).
 class_names = ['Iris setosa', 'Iris versicolor', 'Iris virginica']
-predictions = keras_model(predict_dataset_sorted, training=False)
+predictions = np.argmax(keras_model.predict(predict_dataset), axis=-1)
 
-for i, logits in enumerate(predict_dataset_sorted):
+for i, logits in enumerate(predict_dataset):
   class_idx = tf.argmax(logits).numpy()
   p = tf.nn.softmax(logits)[class_idx]
   name = class_names[class_idx]
   print("Example {} prediction: {} ({:4.1f}%)".format(i, name, 100*p))
+
+# make class predictions with the model
+predictions = np.argmax(keras_model.predict(train_features), axis=-1)
+# summarize the first 5 cases
+
+print(predictions)
+

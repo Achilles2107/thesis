@@ -2,7 +2,7 @@ import collections
 import attr
 import tensorflow as tf
 import tensorflow_federated as tff
-
+from outsourcing import CustomMetrics
 
 @attr.s(frozen=True, slots=True, eq=False)
 class IrisBatchOutput(tff.learning.BatchOutput):
@@ -50,7 +50,7 @@ def iris_forward_pass(variables, batch):
     variables.num_examples.assign_add(num_examples)
     variables.loss_sum.assign_add(loss * num_examples)
     variables.accuracy_sum.assign_add(accuracy * num_examples)
-    variables.client_accuracy.assign_add(accuracy)
+    variables.client_accuracy.assign_add(accuracy * num_examples)
     variables.client_loss.assign(loss)
     variables.client_num_examples.assign(num_examples)
 
@@ -78,11 +78,16 @@ def aggregate_iris_metrics_across_clients(metrics):
         num_examples=tff.federated_sum(metrics.num_examples),
         loss=tff.federated_mean(metrics.loss, metrics.num_examples),
         accuracy=tff.federated_mean(metrics.accuracy, metrics.num_examples),
-        client_accuracy=tff.federated_collect(metrics.client_accuracy),
-        client_loss=tff.federated_sum(metrics.loss),
+        client_accuracy=tff.federated_collect(metrics.accuracy),
+        client_loss=tff.federated_collect(metrics.loss),
         client_num_examples=tff.federated_collect(metrics.num_examples),
     )
 
+metrics_dict = {
+  "Recall": CustomMetrics.recall,
+  "Specitivity": CustomMetrics.specificity
+
+}
 
 class IrisModel(tff.learning.Model):
 
@@ -124,6 +129,7 @@ class IrisModel(tff.learning.Model):
               client_accuracy=client_accuracy,
               client_num_examples=client_num_examples,
           )
+
 
       @tf.function
       def report_local_outputs(self):

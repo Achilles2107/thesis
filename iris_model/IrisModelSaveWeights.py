@@ -102,7 +102,5 @@ print("Test set accuracy: {:.3%}".format(test_accuracy.result()))
 
 model.save(path / "/keras_model/", overwrite=True, include_optimizer=True)
 
-train_acc = model.evaluate(train_features, train_labels)
-test_acc = model.evaluate(test_features, test_labels)
-
-
+train_acc = model.evaluate(train_features, train_labels, steps=10)
+test_acc = model.evaluate(test_features, test_labels, steps=10)
