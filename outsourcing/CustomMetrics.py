@@ -73,3 +73,12 @@ def subplot_metrics(model, metric_name1, metric_name2):
     axs[1].plot(model.history[str(metric_name2)])
     plt.show()
 
+
+def plot_metric_val(model, metric_name1, metric_name2):
+    plt.title(str(metric_name1) + " & " + str(metric_name2))
+    plt.plot(model.history[str(metric_name1)], label=metric_name1)
+    plt.plot(model.history[str(metric_name2)], label=metric_name2)
+    plt.legend()
+    plt.show()
+
+

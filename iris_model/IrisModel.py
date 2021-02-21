@@ -45,9 +45,7 @@ METRICS = [
     recall,
     specificity,
     precision,
-    ["accuracy"],
-    print_y_true,
-    print_y_pred
+    ["accuracy"]
 ]
 
 # Compile the defined model above and declare optimizer, loss

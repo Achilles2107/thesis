@@ -1,6 +1,7 @@
 import nest_asyncio
 from develop.IrisClientData import IrisClientData
 from develop.IrisModel02 import IrisModel
+from outsourcing.CustomMetrics import *
 import collections
 import tensorflow as tf
 import tensorflow_federated as tff
@@ -21,7 +22,7 @@ num_classes = 3
 # Root Path
 root_project_path = path.Path.cwd().parent
 print(root_project_path)
-path = Path(root_project_path / 'storage/iris_model')
+path = Path(root_project_path / 'storage/iris_model/federated_learning')
 filepath = Path(root_project_path / 'datasets/iris_classification/iris_training.csv')
 
 # Reads the data from the iris file
@@ -111,10 +112,13 @@ fed_avg = tff.learning.build_federated_averaging_process(
     server_optimizer_fn=lambda: tf.keras.optimizers.SGD(learning_rate=1.0))  # for Global model
 
 
+
+
 # Start Federated Learning process
 for round_num in range(1, epochs):
     server_state, metrics = fed_avg.next(server_state, federated_train_data)
     print('round {:2d}, metrics={}'.format(round_num, metrics))
+
 
 # Save new model weights
 server_state.model.save(path / "/keras_model/", overwrite=True, include_optimizer=True)

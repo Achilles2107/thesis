@@ -10,10 +10,9 @@ print("Eager execution: {}".format(tf.executing_eagerly()))
 
 # Filepaths
 cwd = path.Path.cwd().parent
-path = Path(cwd / 'storage/iris_model')
-
+path = Path(cwd / 'storage/iris_model/federated_learning/')
 # Path for saving weights
-checkpoint_path = path / "cp.ckpt"
+checkpoint_path = path
 checkpoint_dir = os.path.dirname(checkpoint_path)
 
 # Parameter
@@ -48,7 +47,8 @@ cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path,
 
 
 model = tf.keras.Sequential([
-  tf.keras.layers.Dense(10, activation=tf.nn.relu, input_shape=(4,)),
+  tf.keras.layers.Dense(10, activation=tf.nn.relu,
+                        input_shape=(4,)),
   tf.keras.layers.Dense(3, activation=tf.nn.softmax)
 ])
 
@@ -63,10 +63,10 @@ METRICS = [
 # Compile the defined model above and declare optimizer, loss
 # and metrics
 model.compile(
-                    optimizer=tf.keras.optimizers.Adam(learning_rate=0.01),
-                    loss=tf.keras.losses.CategoricalCrossentropy(from_logits=True),
-                    metrics=METRICS
-                    )
+    optimizer=tf.keras.optimizers.Adam(learning_rate=0.01),
+    loss=tf.keras.losses.CategoricalCrossentropy(from_logits=True),
+    metrics=METRICS
+    )
 
 print(model.metrics)
 
@@ -94,13 +94,16 @@ for (x, y) in test_dataset:
 
 print("Test set accuracy: {:.3%}".format(test_accuracy.result()))
 
-# print("Plotting metrics")
-# CustomMetrics.subplot_metrics(training_history, "recall", "specificity")
-# CustomMetrics.plot_metric(training_history, "precision")
-# CustomMetrics.subplot_metrics(training_history, "accuracy", "loss")
-# print("done")
+print("Plotting metrics")
+CustomMetrics.subplot_metrics(training_history, "recall", "specificity")
+CustomMetrics.plot_metric(training_history, "precision")
+CustomMetrics.subplot_metrics(training_history, "accuracy", "loss")
+CustomMetrics.plot_metric_val(training_history, "accuracy", "val_accuracy")
+CustomMetrics.plot_metric_val(training_history, "loss", "val_loss")
+print("done")
 
-model.save(path / "/keras_model/", overwrite=True, include_optimizer=True)
+# model.save(path / "/keras_model/", overwrite=True, include_optimizer=True)
 
 train_acc = model.evaluate(train_features, train_labels, steps=10)
 test_acc = model.evaluate(test_features, test_labels, steps=10)
+

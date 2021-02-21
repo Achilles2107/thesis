@@ -26,7 +26,7 @@ class PreprocessData:
 
     def get_local_dataset(self):
         self.file_path = self.url + self.filename
-        return print(self.file_path)
+        return print(str(self.file_path))
 
     def create_train_dataset(self):
         dataset = tf.data.experimental.make_csv_dataset(
