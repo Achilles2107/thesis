@@ -1,7 +1,6 @@
 import nest_asyncio
 from develop.IrisClientData import IrisClientData
 from develop.IrisModel02 import IrisModel
-from outsourcing.CustomMetrics import *
 import collections
 import tensorflow as tf
 import tensorflow_federated as tff

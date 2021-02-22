@@ -1,7 +1,5 @@
-import os
 import tensorflow as tf
 from sklearn.preprocessing import LabelEncoder
-from outsourcing import DataPreprocessing
 
 
 class CreateDatasetLists:

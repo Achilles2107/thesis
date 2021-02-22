@@ -6,9 +6,9 @@ from sklearn.utils import shuffle
 root_project_path = pathlib.Path.cwd().parent
 print(root_project_path)
 
-dataset_path_local = pathlib.Path('/datasets/hinkelmann/')
+dataset_path_local = pathlib.Path('/datasets/hinkelmann_model/')
 split_data_path = root_project_path / dataset_path_local / "split"
-path = pathlib.Path('C:/Users/Stefan/PycharmProjects/Thesis/hinkelmann/')
+path = pathlib.Path('/hinkelmann_model/')
 
 root_path = pathlib.Path('C:/Users/Stefan/PycharmProjects/Thesis/datasets/hinkelmann/split')
 

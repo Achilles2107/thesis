@@ -1,14 +1,13 @@
 import pathlib
-import pandas as pd
+import os
 from pathlib import Path
 
 cwd = pathlib.Path.cwd()
 
-print(cwd)
+cwd / '/Thesis/'
 
-path = Path(cwd / 'datasets/iris_classification')
+print('Current Directory: \n', cwd)
 
-df = pd.read_csv(path / 'iris_training.csv')
-print(df.head)
+path = Path(cwd)
 
-print(path)
+iris_no_fl = os.system(str(path / 'iris_model/iris_model.py'))

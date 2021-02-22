@@ -1,10 +1,7 @@
 import os
-import matplotlib.pyplot as plt
-import tensorflow as tf
-from outsourcing import CustomMetrics
-from outsourcing.Datasets import IrisDatasets
-from outsourcing.DataProcessing import *
-from outsourcing.CustomMetrics import *
+from outsourcing.datasets import IrisDatasets
+from outsourcing.iris_classification.data_processing import *
+from outsourcing.custom_metrics import *
 import pathlib as path
 from pathlib import Path
 

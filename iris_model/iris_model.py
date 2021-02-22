@@ -1,6 +1,6 @@
-from outsourcing.Datasets import IrisDatasets
-from outsourcing.DataProcessing import *
-from outsourcing.CustomMetrics import *
+from outsourcing.datasets import IrisDatasets
+from outsourcing.iris_classification.data_processing import *
+from outsourcing.custom_metrics import *
 import tensorflow as tf
 
 # Parameter
@@ -39,7 +39,7 @@ keras_model = tf.keras.Sequential([
 ])
 
 # Define metrics used in the training
-# Metrics used here are from CustomMetrics.py
+# Metrics used here are from custom_metrics.py
 # alternative use tf.keras.metrics.<metric_name>()
 METRICS = [
     recall,

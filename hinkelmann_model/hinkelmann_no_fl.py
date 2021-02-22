@@ -1,19 +1,12 @@
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Activation
-import tensorflow as tf
+from tensorflow.keras.layers import Dense
 from sklearn.preprocessing import Normalizer
 from sklearn import preprocessing
-from outsourcing import CustomMetrics
 from sklearn.metrics import classification_report,confusion_matrix
-from sklearn.feature_selection import VarianceThreshold
-from pandas.plotting import scatter_matrix
-from yellowbrick.target import FeatureCorrelation
 import pandas as pd
 import numpy as np
 from sklearn.metrics import accuracy_score
-import matplotlib
 import matplotlib.pyplot as plt
-import seaborn as sns
 from sklearn.model_selection import train_test_split
 import os
 print("imports ok")

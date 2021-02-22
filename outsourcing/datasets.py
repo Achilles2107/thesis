@@ -1,4 +1,4 @@
-from outsourcing import DataPreprocessing
+from outsourcing.iris_classification import data_preprocessing
 import pathlib
 
 root_project_path = pathlib.Path.cwd().parent
@@ -12,16 +12,16 @@ class IrisDatasets:
     # Iris datasets
     # Filepaths
 
-    saved_model_path = root_project_path / '/storage/iris_model/'
-    dataset_path_local = root_project_path / '/datasets/iris_classification/'
-    logfile_path = root_project_path / 'datasets/iris_classification/logs/'
-    #split_train_data_path = root_project_path / '/datasets/iris_classification/split/train/'
-    split_test_data_path = root_project_path / '/datasets/iris_classification/split/test/'
+    saved_model_path = str(root_project_path) + '/storage/iris_model/'
+    dataset_path_local = str(root_project_path) + '/datasets/iris_classification/'
+    logfile_path = str(root_project_path) + 'datasets/iris_classification/logs/'
+    split_train_data_path = str(root_project_path) + '/datasets/iris_classification/split/train/'
+    split_test_data_path = str(root_project_path) + '/datasets/iris_classification/split/test/'
 
-    split_train_data_path = 'C:\\Users\\Stefan\\PycharmProjects\\Thesis\\datasets\\iris_classification\\split\\train\\'
+    #split_train_data_path = '/datasets/iris_classification/split/train/'
 
     # Urls and paths
-    github_dataset = dataset_path_local / 'iris_training02.csv'
+    github_dataset = dataset_path_local + 'iris_training02.csv'
     train_dataset_url = "https://storage.googleapis.com/download.tensorflow.org/data/"
     test_url = "https://storage.googleapis.com/download.tensorflow.org/data/"
 
@@ -37,7 +37,7 @@ class IrisDatasets:
     batch_size = 120
 
     # Create Traindata
-    train_data = DataPreprocessing.PreprocessData(
+    train_data = data_preprocessing.PreprocessData(
         train_dataset_url, 'iris_training.csv', label_name, batch_size,
         'Iris Train CSV Tensorflow', True, column_names)
     train_data.get_dataset_by_url()
@@ -47,7 +47,7 @@ class IrisDatasets:
     train_dataset = train_data.dataset
 
     # Create Test Dataset
-    test_data = DataPreprocessing.PreprocessData(test_url, 'iris_test.csv', label_name, batch_size,
+    test_data = data_preprocessing.PreprocessData(test_url, 'iris_test.csv', label_name, batch_size,
                                                  'Iris Test CSV Tensorflow', False, column_names)
 
     test_data.get_dataset_by_url()
@@ -58,7 +58,7 @@ class IrisDatasets:
 
     # Create Split Datasets
 
-    split01_data = DataPreprocessing.PreprocessData(split_train_data_path, '1.csv', label_name, batch_size,
+    split01_data = data_preprocessing.PreprocessData(split_train_data_path, '1.csv', label_name, batch_size,
                                                  'Split01 Train CSV Tensorflow', False, column_names)
 
     split01_data.get_local_dataset()
@@ -67,7 +67,7 @@ class IrisDatasets:
     split01_data.map_dataset()
     split01_dataset = split01_data.dataset
 
-    split02_data = DataPreprocessing.PreprocessData(split_train_data_path, '2.csv', label_name, batch_size,
+    split02_data = data_preprocessing.PreprocessData(split_train_data_path, '2.csv', label_name, batch_size,
                                                     'Split02 Train CSV Tensorflow', False, column_names)
 
     split02_data.get_local_dataset()
@@ -76,12 +76,21 @@ class IrisDatasets:
     split02_data.map_dataset()
     split02_dataset = split02_data.dataset
 
-    split03_data = DataPreprocessing.PreprocessData(split_train_data_path, '3.csv', label_name, batch_size,
+    split03_data = data_preprocessing.PreprocessData(split_train_data_path, '3.csv', label_name, batch_size,
                                                     'Split03 Train CSV Tensorflow', False, column_names)
 
     split03_data.get_local_dataset()
     split03_data.create_train_dataset()
     split03_data.make_graph()
     split03_data.map_dataset()
-    split03_dataset = split01_data.dataset
+    split03_dataset = split03_data.dataset
+
+    split04_data = data_preprocessing.PreprocessData(split_train_data_path, '4.csv', label_name, batch_size,
+                                                    'Split04 Train CSV Tensorflow', False, column_names)
+
+    split04_data.get_local_dataset()
+    split04_data.create_train_dataset()
+    split04_data.make_graph()
+    split04_data.map_dataset()
+    split04_dataset = split04_data.dataset
 

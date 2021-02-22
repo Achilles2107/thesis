@@ -1,6 +1,5 @@
 import tensorflow as tf
 import tensorflow_federated as tff
-from hinkelmann.HinkelmannFederatedData import HKClientData
 import pathlib
 import collections
 import pandas as pd
@@ -20,7 +19,7 @@ def pack_features_vector(features, labels):
 # Run TensorFlow on CPU only
 # os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
-output_path = pathlib.Path('hinkelmann')
+output_path = pathlib.Path('hinkelmann_model')
 
 column_names = ["DestinationPort",
               "FlowDuration",
@@ -107,11 +106,27 @@ feature_names = column_names[:-1]
 
 # HERE STARTS THE FEDERATED LEARNING
 NUM_EPOCHS = 5
-BATCH_SIZE = 200
+BATCH_SIZE = 5000
 SHUFFLE_BUFFER = 100
 PREFETCH_BUFFER = 10
 
-split_data_path = pathlib.Path('C:/Users/Stefan/PycharmProjects/Thesis/datasets/hinkelmann/')
+levels_up = 1
+test_path = root_project_path.parents[levels_up-1]
+
+print("ROOT PROJECT PATH: \n", test_path)
+
+split_data_path = test_path / 'datasets/hinkelmann'
+
+print("Split Data Patch: \n", split_data_path)
+
+train_dataset_full = tf.data.experimental.make_csv_dataset(
+                    str(split_data_path / 'out.csv'),
+                    BATCH_SIZE,
+                    column_names=column_names,
+                    label_name=label_name,
+                    num_epochs=1,
+                    shuffle=False
+)
 
 
 train_dataset01 = tf.data.experimental.make_csv_dataset(
@@ -152,15 +167,20 @@ test_dataset01 = tf.data.experimental.make_csv_dataset(
 
 print(train_dataset01)
 
-train_dataset01 = train_dataset01.map(pack_features_vector)
-train_dataset02 = train_dataset02.map(pack_features_vector)
-train_dataset03 = train_dataset03.map(pack_features_vector)
-test_dataset01 = test_dataset01.map(pack_features_vector)
+features, labels = next(iter(train_dataset_full))
+
+train_dataset_full = train_dataset_full.map(pack_features_vector)
+# train_dataset01 = train_dataset01.map(pack_features_vector)
+# train_dataset02 = train_dataset02.map(pack_features_vector)
+# train_dataset03 = train_dataset03.map(pack_features_vector)
+# test_dataset01 = test_dataset01.map(pack_features_vector)
 
 
-print("train dataset 01", train_dataset01)
+# print("train dataset 01", train_dataset01)
+#
+# federated_train_data = [train_dataset01, train_dataset02, train_dataset03]
 
-federated_train_data = [train_dataset01, train_dataset02, train_dataset03]
+federated_train_data = [train_dataset_full, train_dataset_full, train_dataset_full]
 
 print("federated data: ", federated_train_data)
 

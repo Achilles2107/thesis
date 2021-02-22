@@ -1,7 +1,7 @@
-from outsourcing import CustomMetrics
-from outsourcing.Datasets import IrisDatasets
-from outsourcing.DataProcessing import *
-from outsourcing.CustomMetrics import *
+from outsourcing import custom_metrics
+from outsourcing.datasets import IrisDatasets
+from outsourcing.iris_classification.data_processing import *
+from outsourcing.custom_metrics import *
 import pathlib as path
 from pathlib import Path
 
@@ -80,7 +80,7 @@ training_history = model.fit(train_features, train_labels, epochs=epochs, valida
                              callbacks=cp_callback)
 
 
-CustomMetrics.mean_training_accuracy(training_history, "accuracy")
+custom_metrics.mean_training_accuracy(training_history, "accuracy")
 
 # Model Evaluation
 test_accuracy = tf.keras.metrics.Accuracy()
@@ -95,11 +95,11 @@ for (x, y) in test_dataset:
 print("Test set accuracy: {:.3%}".format(test_accuracy.result()))
 
 print("Plotting metrics")
-CustomMetrics.subplot_metrics(training_history, "recall", "specificity")
-CustomMetrics.plot_metric(training_history, "precision")
-CustomMetrics.subplot_metrics(training_history, "accuracy", "loss")
-CustomMetrics.plot_metric_val(training_history, "accuracy", "val_accuracy")
-CustomMetrics.plot_metric_val(training_history, "loss", "val_loss")
+custom_metrics.subplot_metrics(training_history, "recall", "specificity")
+custom_metrics.plot_metric(training_history, "precision")
+custom_metrics.subplot_metrics(training_history, "accuracy", "loss")
+custom_metrics.plot_metric_val(training_history, "accuracy", "val_accuracy")
+custom_metrics.plot_metric_val(training_history, "loss", "val_loss")
 print("done")
 
 # model.save(path / "/keras_model/", overwrite=True, include_optimizer=True)
