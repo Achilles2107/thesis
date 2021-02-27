@@ -18,7 +18,7 @@ print(root_project_path)
 
 print("imports ok")
 
-new_file = True
+new_file = False
 
 # force numpy and pandas to print every column
 # np.set_printoptions(threshold=sys.maxsize)
@@ -74,18 +74,18 @@ with open(file, 'r') as f:
 # df_test = pd.read_csv(file, low_memory=False, header=None)
 #
 # float_cols = [c for c in df_test if df_test[c].dtype == "double"]
-# double_cols = {c: np.double for c in float_cols}
+# float_cols = {c: np.float32 for c in float_cols}
 #
 # int_cols = [c for c in df_test if df_test[c].dtype == "int64"]
 # int32_cols = {c: np.int32 for c in int_cols}
 #
-# all_cols = {**int32_cols, **double_cols}
+# all_cols = {**int32_cols, **float32_cols}
 #
 # df = pd.read_csv(file, header=None, engine='c', dtype=all_cols, low_memory=False)
 #
 # df = pd.read_csv(file, header=None, skiprows=1, nrows=5000) # nrows limits the number of rows
 
-if new_file is False:
+if new_file is True:
     df = pd.read_csv(file, header=None, low_memory=False)
 
     # Replace negative Infinity Values
@@ -176,6 +176,8 @@ if new_file is False:
     column_names = df.columns
     label_name = column_names[-1]
 
+    df = df.replace([np.inf, -np.inf], 0).fillna(0)
+
     # display 5 rows
     print(df.head())
 
@@ -237,6 +239,8 @@ if new_file is False:
     df.replace(',', '.', inplace=True, regex=True)
     print("done", df.head())
 
+    print("Dtypes: \n", df.dtypes)
+
     # print df into out.csv for further use
     df.to_csv(root_project_path / output_path / 'out.csv', index=False, header=False)
 
@@ -254,6 +258,8 @@ else:
 
     print(str(number_of_rows) + " rows read")
 
+    print("DF START HEAD \n", df.head())
+
     df[df < 0] = 0
     df[df == np.inf] = 0
     df.dropna()
@@ -268,18 +274,31 @@ else:
     # scaler = preprocessing.Normalizer(df)
     # scaler.fit(df)
     # scaler.transform(df)
+    df_label = df[78].values
+    df.pop(df.index[78])
+
+    print("DF: \n", df.head())
+
+    print("LABEL DF: \n", df_label)
 
     # Min-Max normalization
     normalized_df = (df - df.min()) / (df.max() - df.min())
+
+    # scaler = preprocessing.MinMaxScaler()
+    # df = scaler.fit_transform(df.values.reshape(-1, 1))
+
+    #print("DF_LABEL DTYPES \n", df_label.dtypes)
+
+    normalized_df[78] = df_label
 
     print("test : \n", normalized_df.head())
 
     print(str(number_of_rows) + " rows now")
     print("Normalized: \n", normalized_df.head())
 
+    print("DTYPES: \n", normalized_df.dtypes)
+
     # print df into out.csv for further use
     normalized_df.to_csv(root_project_path / output_path / 'out_normalized.csv', index=False, header=False)
 
     print("Written to: \n", out_path)
-
-

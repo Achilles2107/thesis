@@ -11,11 +11,7 @@ print(root_project_path)
 
 print("imports ok")
 
-# Packs features in a single array
-def pack_features_vector(features, labels):
-    features = tf.stack(list(features.values()), axis=1)
-    return features, labels
-
+print("Eagerly: \n", tf.executing_eagerly())
 
 # Run TensorFlow on CPU only
 # os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
@@ -107,7 +103,7 @@ feature_names = column_names[:-1]
 
 # HERE STARTS THE FEDERATED LEARNING
 NUM_EPOCHS = 5
-BATCH_SIZE = 5000
+BATCH_SIZE = 1000
 SHUFFLE_BUFFER = 100
 PREFETCH_BUFFER = 10
 
@@ -120,28 +116,132 @@ split_data_path = test_path / 'Thesis/datasets/hinkelmann'
 
 print("Split Data Patch: \n", split_data_path)
 
-train_dataset_full = tf.data.experimental.make_csv_dataset(
-                    str(split_data_path / 'out_normalized.csv'),
-                    BATCH_SIZE,
-                    column_names=column_names,
-                    label_name=label_name,
-                    num_epochs=1,
-                    shuffle=False
-)
+df = pd.read_csv(str(split_data_path / 'out_normalized.csv'), header=None)
+
+print("INPUT DF: \n", df.head())
+
+print("INPUT Dtypes: \n", df.dtypes)
+
+dtypes = ['float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'float64',
+        'int64' ]
 
 
-# Packs features in a single array
-def pack_features_vector(features, labels):
-    features = tf.stack(list(features.values()), axis=1)
-    return features, labels
+df = pd.read_csv(str(split_data_path / 'out_normalized.csv'))
+
+labels = df.index[78]
+df.drop(df.index[78])
 
 
-features, labels = next(iter(train_dataset_full))
-print(features, labels)
+df.apply(lambda x: pd.to_numeric(x, errors='coerce')).dropna()
 
-train_dataset_full = train_dataset_full.map(pack_features_vector)
+dataset = tf.data.Dataset.from_tensor_slices(df.values)
 
-print("packed dataset: \n", train_dataset_full)
+
+
+print("Content of Dataset: \n", dataset)
+print("Type of Dataset: \n", type(dataset))
+
+# train_dataset_full = tf.data.experimental.make_csv_dataset(
+#                     str(split_data_path / 'out_normalized.csv'),
+#                     BATCH_SIZE,
+#                     column_names=column_names,
+#                     label_name='Label',
+#                     num_epochs=1,
+#                     column_defaults=dtypes,
+#                     shuffle=False,
+#                     ignore_errors=True
+# )
+#
+# print("train_dataset_full: ", train_dataset_full)
+#
+# # Packs features in a single array
+# def pack_features_vector(features, labels):
+#     features = tf.stack(list(features.values()), axis=1)
+#     return features, labels
+#
+#
+# features, labels = next(iter(train_dataset_full))
+# print(features, labels)
+#
+# train_dataset_full = train_dataset_full.map(pack_features_vector)
+#
+# print("packed dataset: \n", train_dataset_full)
 
 # Create neural net
 

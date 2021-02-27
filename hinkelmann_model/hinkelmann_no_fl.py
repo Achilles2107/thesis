@@ -2,12 +2,13 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from sklearn.preprocessing import Normalizer
 from sklearn import preprocessing
-from sklearn.metrics import classification_report,confusion_matrix
+from sklearn.metrics import classification_report, confusion_matrix
 import pandas as pd
 import numpy as np
 from sklearn.metrics import accuracy_score
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
+from sklearn.feature_selection import VarianceThreshold
 import os
 print("imports ok")
 
@@ -17,13 +18,13 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 daten = 'C:\\Users\\Stefan\\Nextcloud\\Thesisstuff\\Datensätze\\MachineLearningCSV\\MachineLearningCVE\\'
 
-# daten = '/home/stefan/daten/'
+# daten = '/home/stefan/data/'
 
 '''load datasets'''
 
 file = daten + 'Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv'
 
-df = pd.read_csv(file, header=None, low_memory=False, skiprows=1, nrows=50)
+df = pd.read_csv(file, header=None, low_memory=False, skiprows=1, nrows=100)
 
 # Replace negative Infinity Values
 df = df.replace([np.inf, -np.inf], 0).fillna(0)
@@ -152,14 +153,25 @@ print(dropped)
 result = df.isnull().sum().sum()
 print('NAN Werte: ', result)
 
+# # remove rows with low variance, label has to be a number: 0,1,2..
+threshold_n = 0.99
+df = df.drop(['Label'], axis=1)
+print(df.head())
+
+sel = VarianceThreshold(threshold=(threshold_n * (1 - threshold_n) ))
+sel_var = sel.fit_transform(df)
+df = df[df.columns[sel.get_support(indices=True)]]
+print("Variance removed: \n", df)
+
+
 # NORMALIZATION of X Values
 print(df[0:5])
 # separate array into input and output components
-# X = df.values[:,0:66]
-# Y = df.values[:,66]
+X = df.values[:,0:65]
+Y = df.values[:,65]
 
-X = df.values[:, 0:78]
-Y = df.values[:, 78]
+# X = df.values[:, 0:78]
+# Y = df.values[:, 78]
 
 scaler = Normalizer().fit(X)
 normalizedX = scaler.transform(X)
@@ -194,13 +206,6 @@ print(Y)
 
 # check if data looks normalized
 print(df.head())
-
-# # remove rows with low variance, label has to be a number: 0,1,2..
-# threshold_n = 0.99
-# sel = VarianceThreshold(threshold=(threshold_n * (1 - threshold_n) ))
-# sel_var = sel.fit_transform(df)
-# df = df[df.columns[sel.get_support(indices=True)]]
-# df.head()
 
 # Create a test/train split.  33% test
 # Split into train/test
@@ -256,5 +261,16 @@ plt.ylabel('Accuracy')
 plt.xlabel('Epoch')
 plt.legend(['Train', 'Test'], loc='upper left')
 plt.show()
+plt.savefig('plot_accuracy.png')
+
+# Plot training & validation accuracy values
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('Model Loss')
+plt.ylabel('Loss')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Test'], loc='upper left')
+plt.show()
+plt.savefig('plot_loss.png')
 
 
